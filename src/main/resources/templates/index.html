@@ -1,0 +1,37 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"/>
+  <title>Invento Acción</title>
+  <link rel="stylesheet" href="/css/main.css"/>
+</head>
+<body>
+  <header>
+    <h1>Invento Acción</h1>
+    <nav>
+      <ul>
+        <li>Sobre Invento Acción
+          <ul>
+            <li><a th:href="@{/nosotros}">Nosotros</a></li>
+            <li><a th:href="@{/datos}">Tratamiento de datos</a></li>
+            <li><a th:href="@{/terminos}">Términos y condiciones</a></li>
+            <li><a th:href="@{/privacidad}">Políticas de privacidad</a></li>
+            <li><a th:href="@{/soporte}">Soporte</a></li>
+            <li><a th:href="@{/contacto}">Contáctanos</a></li>
+          </ul>
+        </li>
+        <li>Tablero e indicadores
+          <ul>
+            <li><a th:href="@{/tablero/resumen}">Resumen</a></li>
+            <li><a th:href="@{/tablero/alertas}">Alertas y accesos rápidos</a></li>
+            <li><a th:href="@{/tablero/reportes}">Reportes y estadísticas</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <p>Bienvenido al sistema de Invento Acción. Usa el menú para navegar.</p>
+  </main>
+</body>
+</html>

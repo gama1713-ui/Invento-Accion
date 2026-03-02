@@ -1,0 +1,18 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="utf-8"/><title>Crear Activo</title></head>
+<body>
+  <h1>Crear / Editar Activo</h1>
+  <form th:action="@{/activos}" th:object="${activo}" method="post">
+    <label>Nombre: <input type="text" th:field="*{nombre}" /></label><br/>
+    <label>Categoria: <input type="text" th:field="*{categoria}" /></label><br/>
+    <label>Ubicacion: <input type="text" th:field="*{ubicacion}" /></label><br/>
+    <label>Unidad Medida: <input type="text" th:field="*{unidadMedida}" /></label><br/>
+    <label>Cantidad Actual: <input type="number" th:field="*{cantidadActual}" /></label><br/>
+    <label>Stock Minimo: <input type="number" th:field="*{stockMinimo}" /></label><br/>
+    <button type="submit">Guardar</button>
+  </form>
+  <a th:href="@{/activos}">Cancelar</a>
+
+</body>
+</html>
