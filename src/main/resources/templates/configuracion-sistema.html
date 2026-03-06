@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="copyright" content="Invento Acción, Sistema de Gestión Tecnológica">
+  <title>Configuración del Sistema - Invento Acción</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <!-- Digigram CSS -->
+  <link rel="stylesheet" href="/assets/digigram/css/maicons.css">
+  <link rel="stylesheet" href="/assets/digigram/css/theme.css">
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Custom CSS -->
+  <style>
+    :root {
+      --primary: #2563eb;
+      --secondary: #1e40af;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --info: #06b6d4;
+      --light: #f3f4f6;
+      --dark: #1f2937;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 1rem 0;
+    }
+
+    .navbar-brand {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: white !important;
+    }
+
+    .navbar-brand span {
+      color: var(--info);
+    }
+
+    .nav-link {
+      color: rgba(255,255,255,0.85) !important;
+      margin: 0 0.5rem;
+      transition: color 0.3s;
+    }
+
+    .nav-link:hover {
+      color: white !important;
+    }
+
+    /* Page Header */
+    .page-header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+      padding: 4rem 0 2rem;
+      margin-top: -76px;
+      padding-top: 6rem;
+    }
+
+    .page-title {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    .breadcrumb {
+      background: transparent;
+      padding: 0;
+    }
+
+    .breadcrumb-item a {
+      color: rgba(255,255,255,0.8);
+    }
+
+    .breadcrumb-item.active {
+      color: white;
+    }
+
+    /* Content */
+    .content-section {
+      padding: 3rem 0;
+    }
+
+    .config-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .config-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+
+    .config-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+    }
+
+    .config-title i {
+      margin-right: 0.5rem;
+      color: var(--primary);
+    }
+
+    .config-description {
+      color: #6b7280;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 0.75rem;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .form-select {
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 0.75rem;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .form-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .btn-config {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.75rem 2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .btn-config:hover {
+      background: var(--secondary);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+    }
+
+    .btn-outline-config {
+      border: 2px solid var(--primary);
+      color: var(--primary);
+      background: transparent;
+      padding: 0.75rem 2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .btn-outline-config:hover {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    /* System Status */
+    .status-indicator {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+
+    .status-online {
+      background: var(--success);
+    }
+
+    .status-offline {
+      background: var(--danger);
+    }
+
+    .status-warning {
+      background: var(--warning);
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--dark);
+      color: white;
+      padding: 3rem 0 1rem;
+      margin-top: 4rem;
+    }
+
+    .footer h5 {
+      color: white;
+      margin-bottom: 1rem;
+    }
+
+    .footer a {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer a:hover {
+      color: white;
+    }
+
+    .social-icons a {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      text-align: center;
+      line-height: 40px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+      transition: all 0.3s;
+    }
+
+    .social-icons a:hover {
+      background: var(--primary);
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">Invento <span>Acción</span></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navAbout" role="button" data-bs-toggle="dropdown">
+              <i class="fas fa-info-circle"></i> Sobre Nosotros
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navAbout">
+              <li><a class="dropdown-item" th:href="@{/nosotros}"><i class="fas fa-users"></i> Nosotros</a></li>
+              <li><a class="dropdown-item" th:href="@{/datos}"><i class="fas fa-shield-alt"></i> Tratamiento de datos</a></li>
+              <li><a class="dropdown-item" th:href="@{/terminos}"><i class="fas fa-file-contract"></i> Términos y condiciones</a></li>
+              <li><a class="dropdown-item" th:href="@{/privacidad}"><i class="fas fa-lock"></i> Políticas de privacidad</a></li>
+              <li><a class="dropdown-item" th:href="@{/soporte}"><i class="fas fa-headset"></i> Soporte</a></li>
+              <li><a class="dropdown-item" th:href="@{/contacto}"><i class="fas fa-envelope"></i> Contáctanos</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navDashboard" role="button" data-bs-toggle="dropdown">
+              <i class="fas fa-chart-line"></i> Tablero
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navDashboard">
+              <li><a class="dropdown-item" th:href="@{/tablero/resumen}"><i class="fas fa-tachometer-alt"></i> Resumen</a></li>
+              <li><a class="dropdown-item" th:href="@{/tablero/alertas}"><i class="fas fa-bell"></i> Alertas y accesos rápidos</a></li>
+              <li><a class="dropdown-item" th:href="@{/tablero/reportes}"><i class="fas fa-chart-pie"></i> Reportes y estadísticas</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/activos}"><i class="fas fa-laptop"></i> Activos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/movimientos}"><i class="fas fa-exchange-alt"></i> Movimientos</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navGestion" role="button" data-bs-toggle="dropdown">
+              <i class="fas fa-cogs"></i> Gestión
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navGestion">
+              <li><a class="dropdown-item" th:href="@{/gestion/usuarios}"><i class="fas fa-users-cog"></i> Usuarios</a></li>
+              <li><a class="dropdown-item" th:href="@{/gestion/categorias}"><i class="fas fa-tags"></i> Categorías</a></li>
+              <li><a class="dropdown-item" th:href="@{/gestion/proveedores}"><i class="fas fa-truck"></i> Proveedores</a></li>
+              <li><a class="dropdown-item" th:href="@{/gestion/ubicaciones}"><i class="fas fa-map-marker-alt"></i> Ubicaciones</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navConfiguracion" role="button" data-bs-toggle="dropdown">
+              <i class="fas fa-wrench"></i> Configuración
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navConfiguracion">
+              <li><a class="dropdown-item" th:href="@{/configuracion/sistema}"><i class="fas fa-server"></i> Sistema</a></li>
+              <li><a class="dropdown-item" th:href="@{/configuracion/seguridad}"><i class="fas fa-shield-alt"></i> Seguridad</a></li>
+              <li><a class="dropdown-item" th:href="@{/configuracion/notificaciones}"><i class="fas fa-bell"></i> Notificaciones</a></li>
+              <li><a class="dropdown-item" th:href="@{/configuracion/integraciones}"><i class="fas fa-plug"></i> Integraciones</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navAdministracion" role="button" data-bs-toggle="dropdown">
+              <i class="fas fa-user-shield"></i> Administración
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navAdministracion">
+              <li><a class="dropdown-item" th:href="@{/administracion/logs}"><i class="fas fa-file-alt"></i> Logs del Sistema</a></li>
+              <li><a class="dropdown-item" th:href="@{/administracion/backup}"><i class="fas fa-database"></i> Backup y Restauración</a></li>
+              <li><a class="dropdown-item" th:href="@{/administracion/mantenimiento}"><i class="fas fa-tools"></i> Mantenimiento</a></li>
+              <li><a class="dropdown-item" th:href="@{/administracion/auditoria}"><i class="fas fa-search"></i> Auditoría</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="page-title">Configuración del Sistema</h1>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+              <li class="breadcrumb-item"><a href="#">Configuración</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Sistema</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Content -->
+  <section class="content-section">
+    <div class="container">
+      <!-- System Status -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="config-card">
+            <h3 class="config-title">
+              <i class="fas fa-server"></i> Estado del Sistema
+            </h3>
+            <div class="row">
+              <div class="col-md-3">
+                <div class="text-center">
+                  <span class="status-indicator status-online"></span>
+                  <strong>Servidor Web</strong>
+                  <p class="text-success mb-0">En línea</p>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="text-center">
+                  <span class="status-indicator status-online"></span>
+                  <strong>Base de Datos</strong>
+                  <p class="text-success mb-0">Conectada</p>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="text-center">
+                  <span class="status-indicator status-online"></span>
+                  <strong>API REST</strong>
+                  <p class="text-success mb-0">Funcionando</p>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="text-center">
+                  <span class="status-indicator status-warning"></span>
+                  <strong>Espacio Disco</strong>
+                  <p class="text-warning mb-0">85% usado</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- General Settings -->
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="config-card">
+            <h3 class="config-title">
+              <i class="fas fa-cog"></i> Configuración General
+            </h3>
+            <form>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="systemName" class="form-label">Nombre del Sistema</label>
+                    <input type="text" class="form-control" id="systemName" value="Invento Acción" readonly>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="systemVersion" class="form-label">Versión</label>
+                    <input type="text" class="form-control" id="systemVersion" value="1.0.0" readonly>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="defaultLanguage" class="form-label">Idioma Predeterminado</label>
+                    <select class="form-select" id="defaultLanguage">
+                      <option value="es" selected>Español</option>
+                      <option value="en">English</option>
+                      <option value="pt">Português</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="timezone" class="form-label">Zona Horaria</label>
+                    <select class="form-select" id="timezone">
+                      <option value="America/Bogota" selected>America/Bogotá (GMT-5)</option>
+                      <option value="America/Mexico_City">America/México (GMT-6)</option>
+                      <option value="America/Santiago">America/Santiago (GMT-4)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="sessionTimeout" class="form-label">Tiempo de Sesión (minutos)</label>
+                    <input type="number" class="form-control" id="sessionTimeout" value="30" min="5" max="480">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="maxFileSize" class="form-label">Tamaño Máximo de Archivo (MB)</label>
+                    <input type="number" class="form-control" id="maxFileSize" value="10" min="1" max="100">
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="systemDescription" class="form-label">Descripción del Sistema</label>
+                <textarea class="form-control" id="systemDescription" rows="3" readonly>Sistema integral de gestión de inventario tecnológico para empresas modernas.</textarea>
+              </div>
+
+              <div class="d-flex gap-2">
+                <button type="button" class="btn btn-config" onclick="alert('Configuración guardada exitosamente')">Guardar Cambios</button>
+                <button type="button" class="btn btn-outline-config" onclick="location.reload()">Restaurar Valores</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <!-- Quick Actions -->
+          <div class="config-card">
+            <h3 class="config-title">
+              <i class="fas fa-bolt"></i> Acciones Rápidas
+            </h3>
+            <div class="d-grid gap-2">
+              <button class="btn btn-outline-primary" onclick="alert('Funcionalidad próximamente disponible')">
+                <i class="fas fa-sync-alt"></i> Limpiar Cache
+              </button>
+              <button class="btn btn-outline-warning" onclick="alert('Funcionalidad próximamente disponible')">
+                <i class="fas fa-database"></i> Optimizar Base de Datos
+              </button>
+              <button class="btn btn-outline-info" onclick="alert('Funcionalidad próximamente disponible')">
+                <i class="fas fa-file-export"></i> Exportar Configuración
+              </button>
+              <button class="btn btn-outline-success" onclick="alert('Funcionalidad próximamente disponible')">
+                <i class="fas fa-file-import"></i> Importar Configuración
+              </button>
+            </div>
+          </div>
+
+          <!-- System Info -->
+          <div class="config-card">
+            <h3 class="config-title">
+              <i class="fas fa-info-circle"></i> Información del Sistema
+            </h3>
+            <div class="mb-2">
+              <strong>Java Version:</strong> 17.0.8
+            </div>
+            <div class="mb-2">
+              <strong>Spring Boot:</strong> 3.1.4
+            </div>
+            <div class="mb-2">
+              <strong>Base de Datos:</strong> H2 2.1.214
+            </div>
+            <div class="mb-2">
+              <strong>Servidor:</strong> Render
+            </div>
+            <div class="mb-0">
+              <strong>Último Reinicio:</strong> 2026-03-05 23:20
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 mb-4">
+          <h5>Invento Acción</h5>
+          <p>Sistema integral de gestión de inventario tecnológico para empresas modernas.</p>
+          <div class="social-icons mt-3">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-4 mb-4">
+          <h5>Enlaces Rápidos</h5>
+          <ul class="list-unstyled">
+            <li><a th:href="@{/tablero/resumen}">Tablero</a></li>
+            <li><a th:href="@{/activos}">Activos</a></li>
+            <li><a th:href="@{/movimientos}">Movimientos</a></li>
+            <li><a th:href="@{/soporte}">Soporte</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-2 col-md-4 mb-4">
+          <h5>Información</h5>
+          <ul class="list-unstyled">
+            <li><a th:href="@{/nosotros}">Sobre Nosotros</a></li>
+            <li><a th:href="@{/terminos}">Términos</a></li>
+            <li><a th:href="@{/privacidad}">Privacidad</a></li>
+            <li><a th:href="@{/contacto}">Contacto</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-4 mb-4">
+          <h5>Contacto</h5>
+          <p><i class="fas fa-envelope me-2"></i>soporte@inventoaccion.com</p>
+          <p><i class="fas fa-phone me-2"></i>+57 300 123 45 67</p>
+          <p><i class="fas fa-map-marker-alt me-2"></i>Medellín, Colombia</p>
+        </div>
+      </div>
+      <hr class="my-4">
+      <div class="row">
+        <div class="col-12 text-center">
+          <p class="mb-0">&copy; 2026 Invento Acción. Todos los derechos reservados.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

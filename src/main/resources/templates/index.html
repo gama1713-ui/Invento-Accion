@@ -359,6 +359,39 @@
           <li class="nav-item">
             <a class="nav-link" th:href="@{/movimientos}"><i class="fas fa-exchange-alt"></i> Movimientos</a>
           </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navGestion" role="button" data-bs-toggle="dropdown">
+              <i class="fas fa-cogs"></i> Gestión
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navGestion">
+              <li><a class="dropdown-item" th:href="@{/gestion/usuarios}"><i class="fas fa-users-cog"></i> Usuarios</a></li>
+              <li><a class="dropdown-item" th:href="@{/gestion/categorias}"><i class="fas fa-tags"></i> Categorías</a></li>
+              <li><a class="dropdown-item" th:href="@{/gestion/proveedores}"><i class="fas fa-truck"></i> Proveedores</a></li>
+              <li><a class="dropdown-item" th:href="@{/gestion/ubicaciones}"><i class="fas fa-map-marker-alt"></i> Ubicaciones</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navConfiguracion" role="button" data-bs-toggle="dropdown">
+              <i class="fas fa-wrench"></i> Configuración
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navConfiguracion">
+              <li><a class="dropdown-item" th:href="@{/configuracion/sistema}"><i class="fas fa-server"></i> Sistema</a></li>
+              <li><a class="dropdown-item" th:href="@{/configuracion/seguridad}"><i class="fas fa-shield-alt"></i> Seguridad</a></li>
+              <li><a class="dropdown-item" th:href="@{/configuracion/notificaciones}"><i class="fas fa-bell"></i> Notificaciones</a></li>
+              <li><a class="dropdown-item" th:href="@{/configuracion/integraciones}"><i class="fas fa-plug"></i> Integraciones</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navAdministracion" role="button" data-bs-toggle="dropdown">
+              <i class="fas fa-user-shield"></i> Administración
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navAdministracion">
+              <li><a class="dropdown-item" th:href="@{/administracion/logs}"><i class="fas fa-file-alt"></i> Logs del Sistema</a></li>
+              <li><a class="dropdown-item" th:href="@{/administracion/backup}"><i class="fas fa-database"></i> Backup y Restauración</a></li>
+              <li><a class="dropdown-item" th:href="@{/administracion/mantenimiento}"><i class="fas fa-tools"></i> Mantenimiento</a></li>
+              <li><a class="dropdown-item" th:href="@{/administracion/auditoria}"><i class="fas fa-search"></i> Auditoría</a></li>
+            </ul>
+          </li>
         </ul>
       </div>
     </div>

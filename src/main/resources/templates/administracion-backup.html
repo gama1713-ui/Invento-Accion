@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="copyright" content="Invento Acción, Sistema de Gestión Tecnológica">
+  <title>Backup y Restauración - Invento Acción</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <!-- Digigram CSS -->
+  <link rel="stylesheet" href="/assets/digigram/css/maicons.css">
+  <link rel="stylesheet" href="/assets/digigram/css/theme.css">
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Custom CSS -->
+  <style>
+    :root {
+      --primary: #2563eb;
+      --secondary: #1e40af;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --info: #06b6d4;
+      --light: #f3f4f6;
+      --dark: #1f2937;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 1rem 0;
+    }
+
+    .navbar-brand {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: white !important;
+    }
+
+    .navbar-brand span {
+      color: var(--info);
+    }
+
+    .nav-link {
+      color: rgba(255,255,255,0.85) !important;
+      margin: 0 0.5rem;
+      transition: color 0.3s;
+    }
+
+    .nav-link:hover {
+      color: white !important;
+    }
+
+    /* Page Header */
+    .page-header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+      padding: 4rem 0 2rem;
+      margin-top: -76px;
+      padding-top: 6rem;
+    }
+
+    .page-title {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    .breadcrumb {
+      background: transparent;
+      padding: 0;
+    }
+
+    .breadcrumb-item a {
+      color: rgba(255,255,255,0.8);
+    }
+
+    .breadcrumb-item.active {
+      color: white;
+    }
+
+    /* Content */
+    .content-section {
+      padding: 3rem 0;
+    }
+
+    .admin-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .admin-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+
+    .admin-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+    }
+
+    .admin-title i {
+      margin-right: 0.5rem;
+      color: var(--primary);
+    }
+
+    .admin-description {
+      color: #6b7280;
+      margin-bottom: 1.5rem;
+    }
+
+    .btn-admin {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .btn-admin:hover {
+      background: var(--secondary);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+    }
+
+    /* Backup Cards */
+    .backup-card {
+      border: 2px solid var(--light);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      transition: all 0.3s;
+    }
+
+    .backup-card:hover {
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(37,99,235,0.1);
+    }
+
+    .backup-card.success {
+      border-color: var(--success);
+      background: rgba(16,185,129,0.05);
+    }
+
+    .backup-card.warning {
+      border-color: var(--warning);
+      background: rgba(245,158,11,0.05);
+    }
+
+    .backup-name {
+      font-weight: bold;
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .backup-info {
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+
+    .backup-size {
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    .backup-status {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .status-success {
+      background: rgba(16,185,129,0.1);
+      color: var(--success);
+    }
+
+    .status-warning {
+      background: rgba(245,158,11,0.1);
+      color: var(--warning);
+    }
+
+    .status-error {
+      background: rgba(239,68,68,0.1);
+      color: var(--danger);
+    }
+
+    /* Progress Bar */
+    .progress {
+      height: 8px;
+      border-radius: 4px;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--dark);
+      color: white;
+      padding: 3rem 0 1rem;
+      margin-top: 4rem;
+    }
+
+    .footer h5 {
+      color: white;
+      margin-bottom: 1rem;
+    }
+
+    .footer a {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer a:hover {
+      color: white;
+    }
+
+    .social-icons a {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      text-align: center;
+      line-height: 40px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+      transition: all 0.3s;
+    }
+
+    .social-icons a:hover {
+      background: var(--primary);
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">Invento <span>Acción</span></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navAbout" role="button" data-bs-toggle="dropdown">
+              <i class="fas fa-info-circle"></i> Sobre Nosotros
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navAbout">
+              <li><a class="dropdown-item" th:href="@{/nosotros}"><i class="fas fa-users"></i> Nosotros</a></li>
+              <li><a class="dropdown-item" th:href="@{/datos}"><i class="fas fa-shield-alt"></i> Tratamiento de datos</a></li>
+              <li><a class="dropdown-item" th:href="@{/terminos}"><i class="fas fa-file-contract"></i> Términos y condiciones</a></li>
+              <li><a class="dropdown-item" th:href="@{/privacidad}"><i class="fas fa-lock"></i> Políticas de privacidad</a></li>
+              <li><a class="dropdown-item" th:href="@{/soporte}"><i class="fas fa-headset"></i> Soporte</a></li>
+              <li><a class="dropdown-item" th:href="@{/contacto}"><i class="fas fa-envelope"></i> Contáctanos</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navDashboard" role="button" data-bs-toggle="dropdown">
+              <i class="fas fa-chart-line"></i> Tablero
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navDashboard">
+              <li><a class="dropdown-item" th:href="@{/tablero/resumen}"><i class="fas fa-tachometer-alt"></i> Resumen</a></li>
+              <li><a class="dropdown-item" th:href="@{/tablero/alertas}"><i class="fas fa-bell"></i> Alertas y accesos rápidos</a></li>
+              <li><a class="dropdown-item" th:href="@{/tablero/reportes}"><i class="fas fa-chart-pie"></i> Reportes y estadísticas</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/activos}"><i class="fas fa-laptop"></i> Activos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/movimientos}"><i class="fas fa-exchange-alt"></i> Movimientos</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navGestion" role="button" data-bs-toggle="dropdown">
+              <i class="fas fa-cogs"></i> Gestión
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navGestion">
+              <li><a class="dropdown-item" th:href="@{/gestion/usuarios}"><i class="fas fa-users-cog"></i> Usuarios</a></li>
+              <li><a class="dropdown-item" th:href="@{/gestion/categorias}"><i class="fas fa-tags"></i> Categorías</a></li>
+              <li><a class="dropdown-item" th:href="@{/gestion/proveedores}"><i class="fas fa-truck"></i> Proveedores</a></li>
+              <li><a class="dropdown-item" th:href="@{/gestion/ubicaciones}"><i class="fas fa-map-marker-alt"></i> Ubicaciones</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navConfiguracion" role="button" data-bs-toggle="dropdown">
+              <i class="fas fa-wrench"></i> Configuración
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navConfiguracion">
+              <li><a class="dropdown-item" th:href="@{/configuracion/sistema}"><i class="fas fa-server"></i> Sistema</a></li>
+              <li><a class="dropdown-item" th:href="@{/configuracion/seguridad}"><i class="fas fa-shield-alt"></i> Seguridad</a></li>
+              <li><a class="dropdown-item" th:href="@{/configuracion/notificaciones}"><i class="fas fa-bell"></i> Notificaciones</a></li>
+              <li><a class="dropdown-item" th:href="@{/configuracion/integraciones}"><i class="fas fa-plug"></i> Integraciones</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navAdministracion" role="button" data-bs-toggle="dropdown">
+              <i class="fas fa-user-shield"></i> Administración
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navAdministracion">
+              <li><a class="dropdown-item" th:href="@{/administracion/logs}"><i class="fas fa-file-alt"></i> Logs del Sistema</a></li>
+              <li><a class="dropdown-item" th:href="@{/administracion/backup}"><i class="fas fa-database"></i> Backup y Restauración</a></li>
+              <li><a class="dropdown-item" th:href="@{/administracion/mantenimiento}"><i class="fas fa-tools"></i> Mantenimiento</a></li>
+              <li><a class="dropdown-item" th:href="@{/administracion/auditoria}"><i class="fas fa-search"></i> Auditoría</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="page-title">Backup y Restauración</h1>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+              <li class="breadcrumb-item"><a href="#">Administración</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Backup y Restauración</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Content -->
+  <section class="content-section">
+    <div class="container">
+      <!-- Backup Actions -->
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <div class="admin-card">
+            <h3 class="admin-title">
+              <i class="fas fa-plus-circle"></i> Crear Nuevo Backup
+            </h3>
+            <p class="admin-description">
+              Genere una copia de seguridad completa de la base de datos y archivos del sistema.
+            </p>
+            <div class="mb-3">
+              <label class="form-label">Tipo de Backup</label>
+              <select class="form-select">
+                <option value="full">Completo (Base de datos + Archivos)</option>
+                <option value="database">Solo Base de datos</option>
+                <option value="files">Solo Archivos</option>
+              </select>
+            </div>
+            <button class="btn btn-admin" onclick="alert('Funcionalidad próximamente disponible')">
+              <i class="fas fa-save"></i> Crear Backup
+            </button>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="admin-card">
+            <h3 class="admin-title">
+              <i class="fas fa-upload"></i> Restaurar desde Backup
+            </h3>
+            <p class="admin-description">
+              Restaure el sistema desde un archivo de backup existente.
+            </p>
+            <div class="mb-3">
+              <label class="form-label">Archivo de Backup</label>
+              <input type="file" class="form-control" accept=".zip,.sql,.bak">
+            </div>
+            <div class="d-flex gap-2">
+              <button class="btn btn-warning" onclick="alert('Funcionalidad próximamente disponible')">
+                <i class="fas fa-upload"></i> Restaurar
+              </button>
+              <button class="btn btn-outline-danger" onclick="alert('Funcionalidad próximamente disponible')">
+                <i class="fas fa-exclamation-triangle"></i> Verificar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Backup Progress (if running) -->
+      <div class="admin-card" id="backupProgress" style="display: none;">
+        <h3 class="admin-title">
+          <i class="fas fa-spinner fa-spin"></i> Backup en Progreso
+        </h3>
+        <div class="mb-3">
+          <div class="progress">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 65%"></div>
+          </div>
+        </div>
+        <p class="mb-0">Procesando archivos... 65% completado</p>
+      </div>
+
+      <!-- Recent Backups -->
+      <div class="admin-card">
+        <h3 class="admin-title">
+          <i class="fas fa-history"></i> Backups Recientes
+        </h3>
+
+        <div class="backup-card success">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <div class="backup-name">Backup Completo - 2026-03-05 23:15</div>
+              <div class="backup-info">
+                <i class="fas fa-calendar me-1"></i> 5 de marzo de 2026, 23:15 |
+                <i class="fas fa-user me-1"></i> Sistema Automático |
+                <span class="backup-size">2.4 MB</span>
+              </div>
+            </div>
+            <div class="text-end">
+              <span class="backup-status status-success">Completado</span>
+              <div class="mt-2">
+                <button class="btn btn-sm btn-outline-primary me-1" onclick="alert('Funcionalidad próximamente disponible')">
+                  <i class="fas fa-download"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" onclick="alert('Funcionalidad próximamente disponible')">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="backup-card success">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <div class="backup-name">Backup Base de Datos - 2026-03-05 22:00</div>
+              <div class="backup-info">
+                <i class="fas fa-calendar me-1"></i> 5 de marzo de 2026, 22:00 |
+                <i class="fas fa-user me-1"></i> Admin |
+                <span class="backup-size">1.8 MB</span>
+              </div>
+            </div>
+            <div class="text-end">
+              <span class="backup-status status-success">Completado</span>
+              <div class="mt-2">
+                <button class="btn btn-sm btn-outline-primary me-1" onclick="alert('Funcionalidad próximamente disponible')">
+                  <i class="fas fa-download"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" onclick="alert('Funcionalidad próximamente disponible')">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="backup-card warning">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <div class="backup-name">Backup Completo - 2026-03-05 20:30</div>
+              <div class="backup-info">
+                <i class="fas fa-calendar me-1"></i> 5 de marzo de 2026, 20:30 |
+                <i class="fas fa-user me-1"></i> Sistema Automático |
+                <span class="backup-size">2.1 MB</span>
+              </div>
+            </div>
+            <div class="text-end">
+              <span class="backup-status status-warning">Advertencia</span>
+              <div class="mt-2">
+                <button class="btn btn-sm btn-outline-primary me-1" onclick="alert('Funcionalidad próximamente disponible')">
+                  <i class="fas fa-download"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" onclick="alert('Funcionalidad próximamente disponible')">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="mt-2">
+            <small class="text-warning">
+              <i class="fas fa-exclamation-triangle me-1"></i>
+              Algunos archivos no pudieron ser respaldados completamente
+            </small>
+          </div>
+        </div>
+
+        <div class="backup-card success">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <div class="backup-name">Backup Completo - 2026-03-05 18:00</div>
+              <div class="backup-info">
+                <i class="fas fa-calendar me-1"></i> 5 de marzo de 2026, 18:00 |
+                <i class="fas fa-user me-1"></i> Admin |
+                <span class="backup-size">2.3 MB</span>
+              </div>
+            </div>
+            <div class="text-end">
+              <span class="backup-status status-success">Completado</span>
+              <div class="mt-2">
+                <button class="btn btn-sm btn-outline-primary me-1" onclick="alert('Funcionalidad próximamente disponible')">
+                  <i class="fas fa-download"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" onclick="alert('Funcionalidad próximamente disponible')">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="backup-card success">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <div class="backup-name">Backup Base de Datos - 2026-03-05 15:45</div>
+              <div class="backup-info">
+                <i class="fas fa-calendar me-1"></i> 5 de marzo de 2026, 15:45 |
+                <i class="fas fa-user me-1"></i> Sistema Automático |
+                <span class="backup-size">1.9 MB</span>
+              </div>
+            </div>
+            <div class="text-end">
+              <span class="backup-status status-success">Completado</span>
+              <div class="mt-2">
+                <button class="btn btn-sm btn-outline-primary me-1" onclick="alert('Funcionalidad próximamente disponible')">
+                  <i class="fas fa-download"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" onclick="alert('Funcionalidad próximamente disponible')">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Backup Settings -->
+      <div class="admin-card">
+        <h3 class="admin-title">
+          <i class="fas fa-cog"></i> Configuración de Backup
+        </h3>
+        <div class="row">
+          <div class="col-md-6">
+            <h5>Programación Automática</h5>
+            <div class="mb-3">
+              <label class="form-label">Frecuencia</label>
+              <select class="form-select">
+                <option value="daily">Diario</option>
+                <option value="weekly" selected>Semanal</option>
+                <option value="monthly">Mensual</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Hora</label>
+              <input type="time" class="form-control" value="23:00">
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" checked>
+              <label class="form-check-label">
+                Habilitar backups automáticos
+              </label>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <h5>Almacenamiento</h5>
+            <div class="mb-3">
+              <label class="form-label">Ubicación de Backups</label>
+              <input type="text" class="form-control" value="/backups/invento-accion/" readonly>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Retención (días)</label>
+              <input type="number" class="form-control" value="30">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Límite de Espacio (GB)</label>
+              <input type="number" class="form-control" value="10">
+            </div>
+            <button class="btn btn-outline-primary" onclick="alert('Funcionalidad próximamente disponible')">
+              <i class="fas fa-save"></i> Guardar Configuración
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 mb-4">
+          <h5>Invento Acción</h5>
+          <p>Sistema integral de gestión de inventario tecnológico para empresas modernas.</p>
+          <div class="social-icons mt-3">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-4 mb-4">
+          <h5>Enlaces Rápidos</h5>
+          <ul class="list-unstyled">
+            <li><a th:href="@{/tablero/resumen}">Tablero</a></li>
+            <li><a th:href="@{/activos}">Activos</a></li>
+            <li><a th:href="@{/movimientos}">Movimientos</a></li>
+            <li><a th:href="@{/soporte}">Soporte</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-2 col-md-4 mb-4">
+          <h5>Información</h5>
+          <ul class="list-unstyled">
+            <li><a th:href="@{/nosotros}">Sobre Nosotros</a></li>
+            <li><a th:href="@{/terminos}">Términos</a></li>
+            <li><a th:href="@{/privacidad}">Privacidad</a></li>
+            <li><a th:href="@{/contacto}">Contacto</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-4 mb-4">
+          <h5>Contacto</h5>
+          <p><i class="fas fa-envelope me-2"></i>soporte@inventoaccion.com</p>
+          <p><i class="fas fa-phone me-2"></i>+57 300 123 45 67</p>
+          <p><i class="fas fa-map-marker-alt me-2"></i>Medellín, Colombia</p>
+        </div>
+      </div>
+      <hr class="my-4">
+      <div class="row">
+        <div class="col-12 text-center">
+          <p class="mb-0">&copy; 2026 Invento Acción. Todos los derechos reservados.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

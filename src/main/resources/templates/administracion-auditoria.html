@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="copyright" content="Invento Acción, Sistema de Gestión Tecnológica">
+  <title>Auditoría del Sistema - Invento Acción</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <!-- Digigram CSS -->
+  <link rel="stylesheet" href="/assets/digigram/css/maicons.css">
+  <link rel="stylesheet" href="/assets/digigram/css/theme.css">
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Custom CSS -->
+  <style>
+    :root {
+      --primary: #2563eb;
+      --secondary: #1e40af;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --info: #06b6d4;
+      --light: #f3f4f6;
+      --dark: #1f2937;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 1rem 0;
+    }
+
+    .navbar-brand {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: white !important;
+    }
+
+    .navbar-brand span {
+      color: var(--info);
+    }
+
+    .nav-link {
+      color: rgba(255,255,255,0.85) !important;
+      margin: 0 0.5rem;
+      transition: color 0.3s;
+    }
+
+    .nav-link:hover {
+      color: white !important;
+    }
+
+    /* Page Header */
+    .page-header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+      padding: 4rem 0 2rem;
+      margin-top: -76px;
+      padding-top: 6rem;
+    }
+
+    .page-title {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    .breadcrumb {
+      background: transparent;
+      padding: 0;
+    }
+
+    .breadcrumb-item a {
+      color: rgba(255,255,255,0.8);
+    }
+
+    .breadcrumb-item.active {
+      color: white;
+    }
+
+    /* Content */
+    .content-section {
+      padding: 3rem 0;
+    }
+
+    .admin-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .admin-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+
+    .admin-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+    }
+
+    .admin-title i {
+      margin-right: 0.5rem;
+      color: var(--primary);
+    }
+
+    .admin-description {
+      color: #6b7280;
+      margin-bottom: 1.5rem;
+    }
+
+    .btn-admin {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .btn-admin:hover {
+      background: var(--secondary);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+    }
+
+    /* Audit Trail */
+    .audit-entry {
+      border-left: 4px solid var(--light);
+      padding: 1rem;
+      margin-bottom: 1rem;
+      background: var(--light);
+      border-radius: 4px;
+      transition: all 0.3s;
+    }
+
+    .audit-entry:hover {
+      border-left-color: var(--primary);
+      background: rgba(37,99,235,0.05);
+    }
+
+    .audit-entry.create {
+      border-left-color: var(--success);
+    }
+
+    .audit-entry.update {
+      border-left-color: var(--info);
+    }
+
+    .audit-entry.delete {
+      border-left-color: var(--danger);
+    }
+
+    .audit-entry.login {
+      border-left-color: var(--warning);
+    }
+
+    .audit-timestamp {
+      color: #6b7280;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    .audit-action {
+      font-weight: bold;
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .audit-details {
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+
+    .audit-user {
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .audit-entity {
+      font-style: italic;
+    }
+
+    /* Filters */
+    .filter-section {
+      background: var(--light);
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    }
+
+    .filter-controls {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .form-select-sm {
+      width: auto;
+      min-width: 120px;
+    }
+
+    /* Statistics */
+    .stat-card {
+      text-align: center;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--dark);
+      color: white;
+      padding: 3rem 0 1rem;
+      margin-top: 4rem;
+    }
+
+    .footer h5 {
+      color: white;
+      margin-bottom: 1rem;
+    }
+
+    .footer a {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer a:hover {
+      color: white;
+    }
+
+    .social-icons a {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      text-align: center;
+      line-height: 40px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+      transition: all 0.3s;
+    }
+
+    .social-icons a:hover {
+      background: var(--primary);
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">Invento <span>Acción</span></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navAbout" role="button" data-bs-toggle="dropdown">
+              <i class="fas fa-info-circle"></i> Sobre Nosotros
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navAbout">
+              <li><a class="dropdown-item" th:href="@{/nosotros}"><i class="fas fa-users"></i> Nosotros</a></li>
+              <li><a class="dropdown-item" th:href="@{/datos}"><i class="fas fa-shield-alt"></i> Tratamiento de datos</a></li>
+              <li><a class="dropdown-item" th:href="@{/terminos}"><i class="fas fa-file-contract"></i> Términos y condiciones</a></li>
+              <li><a class="dropdown-item" th:href="@{/privacidad}"><i class="fas fa-lock"></i> Políticas de privacidad</a></li>
+              <li><a class="dropdown-item" th:href="@{/soporte}"><i class="fas fa-headset"></i> Soporte</a></li>
+              <li><a class="dropdown-item" th:href="@{/contacto}"><i class="fas fa-envelope"></i> Contáctanos</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navDashboard" role="button" data-bs-toggle="dropdown">
+              <i class="fas fa-chart-line"></i> Tablero
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navDashboard">
+              <li><a class="dropdown-item" th:href="@{/tablero/resumen}"><i class="fas fa-tachometer-alt"></i> Resumen</a></li>
+              <li><a class="dropdown-item" th:href="@{/tablero/alertas}"><i class="fas fa-bell"></i> Alertas y accesos rápidos</a></li>
+              <li><a class="dropdown-item" th:href="@{/tablero/reportes}"><i class="fas fa-chart-pie"></i> Reportes y estadísticas</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/activos}"><i class="fas fa-laptop"></i> Activos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/movimientos}"><i class="fas fa-exchange-alt"></i> Movimientos</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navGestion" role="button" data-bs-toggle="dropdown">
+              <i class="fas fa-cogs"></i> Gestión
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navGestion">
+              <li><a class="dropdown-item" th:href="@{/gestion/usuarios}"><i class="fas fa-users-cog"></i> Usuarios</a></li>
+              <li><a class="dropdown-item" th:href="@{/gestion/categorias}"><i class="fas fa-tags"></i> Categorías</a></li>
+              <li><a class="dropdown-item" th:href="@{/gestion/proveedores}"><i class="fas fa-truck"></i> Proveedores</a></li>
+              <li><a class="dropdown-item" th:href="@{/gestion/ubicaciones}"><i class="fas fa-map-marker-alt"></i> Ubicaciones</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navConfiguracion" role="button" data-bs-toggle="dropdown">
+              <i class="fas fa-wrench"></i> Configuración
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navConfiguracion">
+              <li><a class="dropdown-item" th:href="@{/configuracion/sistema}"><i class="fas fa-server"></i> Sistema</a></li>
+              <li><a class="dropdown-item" th:href="@{/configuracion/seguridad}"><i class="fas fa-shield-alt"></i> Seguridad</a></li>
+              <li><a class="dropdown-item" th:href="@{/configuracion/notificaciones}"><i class="fas fa-bell"></i> Notificaciones</a></li>
+              <li><a class="dropdown-item" th:href="@{/configuracion/integraciones}"><i class="fas fa-plug"></i> Integraciones</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navAdministracion" role="button" data-bs-toggle="dropdown">
+              <i class="fas fa-user-shield"></i> Administración
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navAdministracion">
+              <li><a class="dropdown-item" th:href="@{/administracion/logs}"><i class="fas fa-file-alt"></i> Logs del Sistema</a></li>
+              <li><a class="dropdown-item" th:href="@{/administracion/backup}"><i class="fas fa-database"></i> Backup y Restauración</a></li>
+              <li><a class="dropdown-item" th:href="@{/administracion/mantenimiento}"><i class="fas fa-tools"></i> Mantenimiento</a></li>
+              <li><a class="dropdown-item" th:href="@{/administracion/auditoria}"><i class="fas fa-search"></i> Auditoría</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="page-title">Auditoría del Sistema</h1>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+              <li class="breadcrumb-item"><a href="#">Administración</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Auditoría</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Content -->
+  <section class="content-section">
+    <div class="container">
+      <!-- Audit Statistics -->
+      <div class="row mb-4">
+        <div class="col-md-3">
+          <div class="stat-card bg-light">
+            <div class="stat-number">1,247</div>
+            <div class="stat-label">Total de Eventos</div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="stat-card bg-light">
+            <div class="stat-number">892</div>
+            <div class="stat-label">Accesos de Usuario</div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="stat-card bg-light">
+            <div class="stat-number">234</div>
+            <div class="stat-label">Cambios en Datos</div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="stat-card bg-light">
+            <div class="stat-number">121</div>
+            <div class="stat-label">Alertas de Seguridad</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filter-section">
+        <h4><i class="fas fa-filter"></i> Filtros de Auditoría</h4>
+        <div class="filter-controls">
+          <select class="form-select form-select-sm">
+            <option value="all">Todas las acciones</option>
+            <option value="create">Crear</option>
+            <option value="update">Actualizar</option>
+            <option value="delete">Eliminar</option>
+            <option value="login">Acceso</option>
+            <option value="security">Seguridad</option>
+          </select>
+          <select class="form-select form-select-sm">
+            <option value="all">Todos los usuarios</option>
+            <option value="admin">Admin</option>
+            <option value="user1">Usuario 1</option>
+            <option value="system">Sistema</option>
+          </select>
+          <select class="form-select form-select-sm">
+            <option value="all">Todas las entidades</option>
+            <option value="activos">Activos</option>
+            <option value="usuarios">Usuarios</option>
+            <option value="movimientos">Movimientos</option>
+            <option value="categorias">Categorías</option>
+          </select>
+          <input type="date" class="form-control form-control-sm" style="width: auto;">
+          <button class="btn btn-primary btn-sm" onclick="alert('Funcionalidad próximamente disponible')">
+            <i class="fas fa-search"></i> Filtrar
+          </button>
+          <button class="btn btn-outline-secondary btn-sm" onclick="alert('Funcionalidad próximamente disponible')">
+            <i class="fas fa-download"></i> Exportar Reporte
+          </button>
+        </div>
+      </div>
+
+      <!-- Audit Trail -->
+      <div class="admin-card">
+        <h3 class="admin-title">
+          <i class="fas fa-history"></i> Registro de Auditoría
+        </h3>
+
+        <div class="audit-entry login">
+          <div class="audit-timestamp">2026-03-05 23:20:15</div>
+          <div class="audit-action">Inicio de sesión exitoso</div>
+          <div class="audit-details">
+            <span class="audit-user">Admin</span> inició sesión desde IP 192.168.1.100
+          </div>
+        </div>
+
+        <div class="audit-entry update">
+          <div class="audit-timestamp">2026-03-05 23:19:45</div>
+          <div class="audit-action">Actualización de activo</div>
+          <div class="audit-details">
+            <span class="audit-user">Admin</span> modificó el <span class="audit-entity">activo Laptop Dell 14</span> (SKU: 2) - cambió ubicación de "Oficina Principal" a "Sala de Reuniones"
+          </div>
+        </div>
+
+        <div class="audit-entry create">
+          <div class="audit-timestamp">2026-03-05 23:19:30</div>
+          <div class="audit-action">Creación de movimiento</div>
+          <div class="audit-details">
+            <span class="audit-user">Admin</span> registró un nuevo <span class="audit-entity">movimiento</span> - Transferencia del activo Cable HDMI 2m (SKU: 1) a "Juan Pérez"
+          </div>
+        </div>
+
+        <div class="audit-entry login">
+          <div class="audit-timestamp">2026-03-05 23:18:22</div>
+          <div class="audit-action">Inicio de sesión exitoso</div>
+          <div class="audit-details">
+            <span class="audit-user">Usuario1</span> inició sesión desde IP 192.168.1.105
+          </div>
+        </div>
+
+        <div class="audit-entry delete">
+          <div class="audit-timestamp">2026-03-05 23:17:58</div>
+          <div class="audit-action">Eliminación de categoría</div>
+          <div class="audit-details">
+            <span class="audit-user">Admin</span> eliminó la <span class="audit-entity">categoría "Antiguos"</span> (ID: 5) - contenía 0 activos
+          </div>
+        </div>
+
+        <div class="audit-entry update">
+          <div class="audit-timestamp">2026-03-05 23:17:15</div>
+          <div class="audit-action">Actualización de usuario</div>
+          <div class="audit-details">
+            <span class="audit-user">Admin</span> modificó permisos del <span class="audit-entity">usuario Juan Pérez</span> - agregó permisos de "Gestión de Activos"
+          </div>
+        </div>
+
+        <div class="audit-entry create">
+          <div class="audit-timestamp">2026-03-05 23:16:42</div>
+          <div class="audit-action">Creación de activo</div>
+          <div class="audit-details">
+            <span class="audit-user">Admin</span> registró un nuevo <span class="audit-entity">activo Teclado Mecánico RGB</span> (SKU: 3) en categoría "Periféricos"
+          </div>
+        </div>
+
+        <div class="audit-entry login">
+          <span class="audit-timestamp">2026-03-05 23:15:33</span>
+          <div class="audit-action">Intento de acceso fallido</div>
+          <div class="audit-details">
+            <span class="audit-user">Usuario desconocido</span> intentó acceder con credenciales incorrectas desde IP 192.168.1.200
+          </div>
+        </div>
+
+        <div class="audit-entry update">
+          <div class="audit-timestamp">2026-03-05 23:14:18</div>
+          <div class="audit-action">Actualización de configuración</div>
+          <div class="audit-details">
+            <span class="audit-user">Admin</span> modificó la <span class="audit-entity">configuración del sistema</span> - cambió zona horaria a "America/Bogota"
+          </div>
+        </div>
+
+        <div class="audit-entry create">
+          <div class="audit-timestamp">2026-03-05 23:13:05</div>
+          <div class="audit-action">Creación de categoría</div>
+          <div class="audit-details">
+            <span class="audit-user">Admin</span> creó una nueva <span class="audit-entity">categoría "Periféricos"</span> (ID: 6)
+          </div>
+        </div>
+
+        <div class="text-center mt-3">
+          <button class="btn btn-outline-primary" onclick="alert('Funcionalidad próximamente disponible')">
+            <i class="fas fa-chevron-down"></i> Cargar Más Eventos
+          </button>
+        </div>
+      </div>
+
+      <!-- Audit Settings -->
+      <div class="admin-card">
+        <h3 class="admin-title">
+          <i class="fas fa-cog"></i> Configuración de Auditoría
+        </h3>
+        <div class="row">
+          <div class="col-md-6">
+            <h5>Eventos a Auditar</h5>
+            <div class="mb-2">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" checked>
+                <label class="form-check-label">Accesos de usuario</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" checked>
+                <label class="form-check-label">Cambios en datos</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" checked>
+                <label class="form-check-label">Operaciones administrativas</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" checked>
+                <label class="form-check-label">Alertas de seguridad</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox">
+                <label class="form-check-label">Consultas de datos</label>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <h5>Configuración General</h5>
+            <div class="mb-3">
+              <label class="form-label">Retención de logs (días)</label>
+              <input type="number" class="form-control" value="365">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Nivel de detalle</label>
+              <select class="form-select">
+                <option value="basic">Básico</option>
+                <option value="detailed" selected>Detallado</option>
+                <option value="full">Completo</option>
+              </select>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" checked>
+              <label class="form-check-label">
+                Notificar eventos críticos
+              </label>
+            </div>
+            <button class="btn btn-outline-primary mt-3" onclick="alert('Funcionalidad próximamente disponible')">
+              <i class="fas fa-save"></i> Guardar Configuración
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 mb-4">
+          <h5>Invento Acción</h5>
+          <p>Sistema integral de gestión de inventario tecnológico para empresas modernas.</p>
+          <div class="social-icons mt-3">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-4 mb-4">
+          <h5>Enlaces Rápidos</h5>
+          <ul class="list-unstyled">
+            <li><a th:href="@{/tablero/resumen}">Tablero</a></li>
+            <li><a th:href="@{/activos}">Activos</a></li>
+            <li><a th:href="@{/movimientos}">Movimientos</a></li>
+            <li><a th:href="@{/soporte}">Soporte</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-2 col-md-4 mb-4">
+          <h5>Información</h5>
+          <ul class="list-unstyled">
+            <li><a th:href="@{/nosotros}">Sobre Nosotros</a></li>
+            <li><a th:href="@{/terminos}">Términos</a></li>
+            <li><a th:href="@{/privacidad}">Privacidad</a></li>
+            <li><a th:href="@{/contacto}">Contacto</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-4 mb-4">
+          <h5>Contacto</h5>
+          <p><i class="fas fa-envelope me-2"></i>soporte@inventoaccion.com</p>
+          <p><i class="fas fa-phone me-2"></i>+57 300 123 45 67</p>
+          <p><i class="fas fa-map-marker-alt me-2"></i>Medellín, Colombia</p>
+        </div>
+      </div>
+      <hr class="my-4">
+      <div class="row">
+        <div class="col-12 text-center">
+          <p class="mb-0">&copy; 2026 Invento Acción. Todos los derechos reservados.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

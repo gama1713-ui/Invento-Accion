@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="copyright" content="Invento Acción, Sistema de Gestión Tecnológica">
+  <title>Mantenimiento del Sistema - Invento Acción</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <!-- Digigram CSS -->
+  <link rel="stylesheet" href="/assets/digigram/css/maicons.css">
+  <link rel="stylesheet" href="/assets/digigram/css/theme.css">
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Custom CSS -->
+  <style>
+    :root {
+      --primary: #2563eb;
+      --secondary: #1e40af;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --info: #06b6d4;
+      --light: #f3f4f6;
+      --dark: #1f2937;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 1rem 0;
+    }
+
+    .navbar-brand {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: white !important;
+    }
+
+    .navbar-brand span {
+      color: var(--info);
+    }
+
+    .nav-link {
+      color: rgba(255,255,255,0.85) !important;
+      margin: 0 0.5rem;
+      transition: color 0.3s;
+    }
+
+    .nav-link:hover {
+      color: white !important;
+    }
+
+    /* Page Header */
+    .page-header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+      padding: 4rem 0 2rem;
+      margin-top: -76px;
+      padding-top: 6rem;
+    }
+
+    .page-title {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    .breadcrumb {
+      background: transparent;
+      padding: 0;
+    }
+
+    .breadcrumb-item a {
+      color: rgba(255,255,255,0.8);
+    }
+
+    .breadcrumb-item.active {
+      color: white;
+    }
+
+    /* Content */
+    .content-section {
+      padding: 3rem 0;
+    }
+
+    .admin-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .admin-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+
+    .admin-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+    }
+
+    .admin-title i {
+      margin-right: 0.5rem;
+      color: var(--primary);
+    }
+
+    .admin-description {
+      color: #6b7280;
+      margin-bottom: 1.5rem;
+    }
+
+    .btn-admin {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .btn-admin:hover {
+      background: var(--secondary);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+    }
+
+    /* Maintenance Cards */
+    .maintenance-card {
+      border: 2px solid var(--light);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      transition: all 0.3s;
+    }
+
+    .maintenance-card:hover {
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(37,99,235,0.1);
+    }
+
+    .maintenance-card.running {
+      border-color: var(--warning);
+      background: rgba(245,158,11,0.05);
+    }
+
+    .maintenance-card.completed {
+      border-color: var(--success);
+      background: rgba(16,185,129,0.05);
+    }
+
+    .maintenance-card.failed {
+      border-color: var(--danger);
+      background: rgba(239,68,68,0.05);
+    }
+
+    .maintenance-name {
+      font-weight: bold;
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .maintenance-info {
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+
+    .maintenance-status {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .status-running {
+      background: rgba(245,158,11,0.1);
+      color: var(--warning);
+    }
+
+    .status-completed {
+      background: rgba(16,185,129,0.1);
+      color: var(--success);
+    }
+
+    .status-failed {
+      background: rgba(239,68,68,0.1);
+      color: var(--danger);
+    }
+
+    /* System Health */
+    .health-indicator {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .health-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+
+    .health-good {
+      background: var(--success);
+    }
+
+    .health-warning {
+      background: var(--warning);
+    }
+
+    .health-critical {
+      background: var(--danger);
+    }
+
+    /* Progress Bar */
+    .progress {
+      height: 8px;
+      border-radius: 4px;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--dark);
+      color: white;
+      padding: 3rem 0 1rem;
+      margin-top: 4rem;
+    }
+
+    .footer h5 {
+      color: white;
+      margin-bottom: 1rem;
+    }
+
+    .footer a {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer a:hover {
+      color: white;
+    }
+
+    .social-icons a {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      text-align: center;
+      line-height: 40px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+      transition: all 0.3s;
+    }
+
+    .social-icons a:hover {
+      background: var(--primary);
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">Invento <span>Acción</span></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navAbout" role="button" data-bs-toggle="dropdown">
+              <i class="fas fa-info-circle"></i> Sobre Nosotros
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navAbout">
+              <li><a class="dropdown-item" th:href="@{/nosotros}"><i class="fas fa-users"></i> Nosotros</a></li>
+              <li><a class="dropdown-item" th:href="@{/datos}"><i class="fas fa-shield-alt"></i> Tratamiento de datos</a></li>
+              <li><a class="dropdown-item" th:href="@{/terminos}"><i class="fas fa-file-contract"></i> Términos y condiciones</a></li>
+              <li><a class="dropdown-item" th:href="@{/privacidad}"><i class="fas fa-lock"></i> Políticas de privacidad</a></li>
+              <li><a class="dropdown-item" th:href="@{/soporte}"><i class="fas fa-headset"></i> Soporte</a></li>
+              <li><a class="dropdown-item" th:href="@{/contacto}"><i class="fas fa-envelope"></i> Contáctanos</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navDashboard" role="button" data-bs-toggle="dropdown">
+              <i class="fas fa-chart-line"></i> Tablero
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navDashboard">
+              <li><a class="dropdown-item" th:href="@{/tablero/resumen}"><i class="fas fa-tachometer-alt"></i> Resumen</a></li>
+              <li><a class="dropdown-item" th:href="@{/tablero/alertas}"><i class="fas fa-bell"></i> Alertas y accesos rápidos</a></li>
+              <li><a class="dropdown-item" th:href="@{/tablero/reportes}"><i class="fas fa-chart-pie"></i> Reportes y estadísticas</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/activos}"><i class="fas fa-laptop"></i> Activos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/movimientos}"><i class="fas fa-exchange-alt"></i> Movimientos</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navGestion" role="button" data-bs-toggle="dropdown">
+              <i class="fas fa-cogs"></i> Gestión
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navGestion">
+              <li><a class="dropdown-item" th:href="@{/gestion/usuarios}"><i class="fas fa-users-cog"></i> Usuarios</a></li>
+              <li><a class="dropdown-item" th:href="@{/gestion/categorias}"><i class="fas fa-tags"></i> Categorías</a></li>
+              <li><a class="dropdown-item" th:href="@{/gestion/proveedores}"><i class="fas fa-truck"></i> Proveedores</a></li>
+              <li><a class="dropdown-item" th:href="@{/gestion/ubicaciones}"><i class="fas fa-map-marker-alt"></i> Ubicaciones</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navConfiguracion" role="button" data-bs-toggle="dropdown">
+              <i class="fas fa-wrench"></i> Configuración
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navConfiguracion">
+              <li><a class="dropdown-item" th:href="@{/configuracion/sistema}"><i class="fas fa-server"></i> Sistema</a></li>
+              <li><a class="dropdown-item" th:href="@{/configuracion/seguridad}"><i class="fas fa-shield-alt"></i> Seguridad</a></li>
+              <li><a class="dropdown-item" th:href="@{/configuracion/notificaciones}"><i class="fas fa-bell"></i> Notificaciones</a></li>
+              <li><a class="dropdown-item" th:href="@{/configuracion/integraciones}"><i class="fas fa-plug"></i> Integraciones</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navAdministracion" role="button" data-bs-toggle="dropdown">
+              <i class="fas fa-user-shield"></i> Administración
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navAdministracion">
+              <li><a class="dropdown-item" th:href="@{/administracion/logs}"><i class="fas fa-file-alt"></i> Logs del Sistema</a></li>
+              <li><a class="dropdown-item" th:href="@{/administracion/backup}"><i class="fas fa-database"></i> Backup y Restauración</a></li>
+              <li><a class="dropdown-item" th:href="@{/administracion/mantenimiento}"><i class="fas fa-tools"></i> Mantenimiento</a></li>
+              <li><a class="dropdown-item" th:href="@{/administracion/auditoria}"><i class="fas fa-search"></i> Auditoría</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="page-title">Mantenimiento del Sistema</h1>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+              <li class="breadcrumb-item"><a href="#">Administración</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Mantenimiento</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Content -->
+  <section class="content-section">
+    <div class="container">
+      <!-- System Health Overview -->
+      <div class="admin-card">
+        <h3 class="admin-title">
+          <i class="fas fa-heartbeat"></i> Estado del Sistema
+        </h3>
+        <div class="row">
+          <div class="col-md-3">
+            <div class="health-indicator">
+              <div class="health-dot health-good"></div>
+              <div>
+                <strong>CPU</strong><br>
+                <small class="text-muted">45% utilizado</small>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="health-indicator">
+              <div class="health-dot health-good"></div>
+              <div>
+                <strong>Memoria</strong><br>
+                <small class="text-muted">2.1 GB / 4 GB</small>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="health-indicator">
+              <div class="health-dot health-warning"></div>
+              <div>
+                <strong>Disco</strong><br>
+                <small class="text-muted">85% utilizado</small>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="health-indicator">
+              <div class="health-dot health-good"></div>
+              <div>
+                <strong>Base de Datos</strong><br>
+                <small class="text-muted">Conectado</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Maintenance Tasks -->
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <div class="admin-card">
+            <h3 class="admin-title">
+              <i class="fas fa-broom"></i> Limpieza del Sistema
+            </h3>
+            <p class="admin-description">
+              Elimine archivos temporales, logs antiguos y datos innecesarios.
+            </p>
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" checked>
+                <label class="form-check-label">Archivos temporales</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" checked>
+                <label class="form-check-label">Logs antiguos (>30 días)</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox">
+                <label class="form-check-label">Sesiones expiradas</label>
+              </div>
+            </div>
+            <button class="btn btn-admin" onclick="alert('Funcionalidad próximamente disponible')">
+              <i class="fas fa-broom"></i> Ejecutar Limpieza
+            </button>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="admin-card">
+            <h3 class="admin-title">
+              <i class="fas fa-database"></i> Optimización de Base de Datos
+            </h3>
+            <p class="admin-description">
+              Reorganice índices, elimine fragmentación y optimice consultas.
+            </p>
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" checked>
+                <label class="form-check-label">Reindexar tablas</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" checked>
+                <label class="form-check-label">Vacuum (limpiar espacio)</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox">
+                <label class="form-check-label">Analizar estadísticas</label>
+              </div>
+            </div>
+            <button class="btn btn-admin" onclick="alert('Funcionalidad próximamente disponible')">
+              <i class="fas fa-database"></i> Optimizar BD
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Maintenance Progress (if running) -->
+      <div class="admin-card" id="maintenanceProgress" style="display: none;">
+        <h3 class="admin-title">
+          <i class="fas fa-spinner fa-spin"></i> Mantenimiento en Progreso
+        </h3>
+        <div class="mb-3">
+          <div class="progress">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 75%"></div>
+          </div>
+        </div>
+        <p class="mb-2">Optimizando base de datos... 75% completado</p>
+        <small class="text-muted">Tiempo estimado restante: 2 minutos</small>
+      </div>
+
+      <!-- Recent Maintenance -->
+      <div class="admin-card">
+        <h3 class="admin-title">
+          <i class="fas fa-history"></i> Historial de Mantenimiento
+        </h3>
+
+        <div class="maintenance-card completed">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <div class="maintenance-name">Limpieza General del Sistema</div>
+              <div class="maintenance-info">
+                <i class="fas fa-calendar me-1"></i> 5 de marzo de 2026, 22:30 |
+                <i class="fas fa-user me-1"></i> Sistema Automático |
+                <i class="fas fa-clock me-1"></i> 15 minutos
+              </div>
+            </div>
+            <div class="text-end">
+              <span class="maintenance-status status-completed">Completado</span>
+              <div class="mt-2">
+                <small class="text-success">
+                  <i class="fas fa-check me-1"></i>
+                  2.3 GB liberados
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="maintenance-card completed">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <div class="maintenance-name">Optimización de Base de Datos</div>
+              <div class="maintenance-info">
+                <i class="fas fa-calendar me-1"></i> 5 de marzo de 2026, 20:00 |
+                <i class="fas fa-user me-1"></i> Admin |
+                <i class="fas fa-clock me-1"></i> 8 minutos
+              </div>
+            </div>
+            <div class="text-end">
+              <span class="maintenance-status status-completed">Completado</span>
+              <div class="mt-2">
+                <small class="text-success">
+                  <i class="fas fa-check me-1"></i>
+                  Índices optimizados
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="maintenance-card failed">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <div class="maintenance-name">Verificación de Integridad</div>
+              <div class="maintenance-info">
+                <i class="fas fa-calendar me-1"></i> 5 de marzo de 2026, 18:15 |
+                <i class="fas fa-user me-1"></i> Sistema Automático |
+                <i class="fas fa-clock me-1"></i> 3 minutos
+              </div>
+            </div>
+            <div class="text-end">
+              <span class="maintenance-status status-failed">Fallido</span>
+              <div class="mt-2">
+                <small class="text-danger">
+                  <i class="fas fa-exclamation-triangle me-1"></i>
+                  Error en tabla 'movimientos'
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="maintenance-card completed">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <div class="maintenance-name">Actualización de Estadísticas</div>
+              <div class="maintenance-info">
+                <i class="fas fa-calendar me-1"></i> 5 de marzo de 2026, 15:30 |
+                <i class="fas fa-user me-1"></i> Sistema Automático |
+                <i class="fas fa-clock me-1"></i> 5 minutos
+              </div>
+            </div>
+            <div class="text-end">
+              <span class="maintenance-status status-completed">Completado</span>
+              <div class="mt-2">
+                <small class="text-success">
+                  <i class="fas fa-check me-1"></i>
+                  Estadísticas actualizadas
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="maintenance-card running">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <div class="maintenance-name">Limpieza de Cache</div>
+              <div class="maintenance-info">
+                <i class="fas fa-calendar me-1"></i> 5 de marzo de 2026, 23:20 |
+                <i class="fas fa-user me-1"></i> Admin |
+                <i class="fas fa-clock me-1"></i> En progreso
+              </div>
+            </div>
+            <div class="text-end">
+              <span class="maintenance-status status-running">En Progreso</span>
+              <div class="mt-2">
+                <div class="progress" style="width: 100px;">
+                  <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" style="width: 60%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Maintenance Schedule -->
+      <div class="admin-card">
+        <h3 class="admin-title">
+          <i class="fas fa-calendar-alt"></i> Programación de Mantenimiento
+        </h3>
+        <div class="row">
+          <div class="col-md-6">
+            <h5>Tareas Automáticas</h5>
+            <div class="mb-3">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span>Limpieza diaria</span>
+                <span class="badge bg-success">Activado</span>
+              </div>
+              <small class="text-muted d-block">Todos los días a las 02:00</small>
+            </div>
+            <div class="mb-3">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span>Optimización semanal</span>
+                <span class="badge bg-success">Activado</span>
+              </div>
+              <small class="text-muted d-block">Domingos a las 03:00</small>
+            </div>
+            <div class="mb-3">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span>Verificación mensual</span>
+                <span class="badge bg-warning">Desactivado</span>
+              </div>
+              <small class="text-muted d-block">Primer día del mes a las 04:00</small>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <h5>Configuración</h5>
+            <div class="mb-3">
+              <label class="form-label">Modo de mantenimiento</label>
+              <select class="form-select">
+                <option value="auto">Automático</option>
+                <option value="manual">Manual</option>
+                <option value="scheduled">Programado</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Tiempo límite (minutos)</label>
+              <input type="number" class="form-control" value="60">
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" checked>
+              <label class="form-check-label">
+                Notificar al completar
+              </label>
+            </div>
+            <button class="btn btn-outline-primary mt-3" onclick="alert('Funcionalidad próximamente disponible')">
+              <i class="fas fa-save"></i> Guardar Configuración
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 mb-4">
+          <h5>Invento Acción</h5>
+      <p>Sistema integral de gestión de inventario tecnológico para empresas modernas.</p>
+      <div class="social-icons mt-3">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+      </div>
+    </div>
+    <div class="col-lg-2 col-md-4 mb-4">
+      <h5>Enlaces Rápidos</h5>
+      <ul class="list-unstyled">
+        <li><a th:href="@{/tablero/resumen}">Tablero</a></li>
+        <li><a th:href="@{/activos}">Activos</a></li>
+        <li><a th:href="@{/movimientos}">Movimientos</a></li>
+        <li><a th:href="@{/soporte}">Soporte</a></li>
+      </ul>
+    </div>
+    <div class="col-lg-2 col-md-4 mb-4">
+      <h5>Información</h5>
+      <ul class="list-unstyled">
+        <li><a th:href="@{/nosotros}">Sobre Nosotros</a></li>
+        <li><a th:href="@{/terminos}">Términos</a></li>
+        <li><a th:href="@{/privacidad}">Privacidad</a></li>
+        <li><a th:href="@{/contacto}">Contacto</a></li>
+      </ul>
+    </div>
+    <div class="col-lg-4 mb-4">
+      <h5>Contacto</h5>
+      <p><i class="fas fa-envelope me-2"></i>soporte@inventoaccion.com</p>
+      <p><i class="fas fa-phone me-2"></i>+57 300 123 45 67</p>
+      <p><i class="fas fa-map-marker-alt me-2"></i>Medellín, Colombia</p>
+    </div>
+  </div>
+  <hr class="my-4">
+  <div class="row">
+    <div class="col-12 text-center">
+      <p class="mb-0">&copy; 2026 Invento Acción. Todos los derechos reservados.</p>
+    </div>
+  </div>
+</div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
