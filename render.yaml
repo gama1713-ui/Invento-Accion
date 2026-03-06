@@ -1,8 +1,0 @@
-services:
-  - type: web
-    name: invento-accion
-    runtime: docker
-    dockerfilePath: ./Dockerfile
-    envVars:
-      - key: PORT
-        value: 8080
