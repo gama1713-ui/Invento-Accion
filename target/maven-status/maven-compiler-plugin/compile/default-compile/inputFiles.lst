@@ -4,8 +4,10 @@
 /Users/macbook/JYHG-SENA-APP/Repositorio/invento-accion/invento-scripts/invento-accion/src/main/java/com/inventoaccion/repository/ActivoRepository.java
 /Users/macbook/JYHG-SENA-APP/Repositorio/invento-accion/invento-scripts/invento-accion/src/main/java/com/inventoaccion/repository/MovimientoRepository.java
 /Users/macbook/JYHG-SENA-APP/Repositorio/invento-accion/invento-scripts/invento-accion/src/main/java/com/inventoaccion/controller/MovimientoController.java
+/Users/macbook/JYHG-SENA-APP/Repositorio/invento-accion/invento-scripts/invento-accion/src/main/java/com/inventoaccion/controller/HomeController.java
 /Users/macbook/JYHG-SENA-APP/Repositorio/invento-accion/invento-scripts/invento-accion/src/main/java/com/inventoaccion/model/Usuario.java
 /Users/macbook/JYHG-SENA-APP/Repositorio/invento-accion/invento-scripts/invento-accion/src/main/java/com/inventoaccion/service/ActivoService.java
+/Users/macbook/JYHG-SENA-APP/Repositorio/invento-accion/invento-scripts/invento-accion/src/main/java/com/inventoaccion/web/ContactController.java
 /Users/macbook/JYHG-SENA-APP/Repositorio/invento-accion/invento-scripts/invento-accion/src/main/java/com/inventoaccion/controller/ActivoController.java
 /Users/macbook/JYHG-SENA-APP/Repositorio/invento-accion/invento-scripts/invento-accion/src/main/java/com/inventoaccion/web/WebController.java
 /Users/macbook/JYHG-SENA-APP/Repositorio/invento-accion/invento-scripts/invento-accion/src/main/java/com/inventoaccion/repository/UsuarioRepository.java

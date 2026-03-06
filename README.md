@@ -1,5 +1,4 @@
 <<<<<<< HEAD
-# Invento Acción - Proyecto mínimo
 
 ## Requisitos
 - Java 17

@@ -1,4 +1,4 @@
-package com.inventoaccion.web;
+package com.inventoaccion.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
