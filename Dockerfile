@@ -1,5 +1,5 @@
 # Build stage
-FROM maven:3.8.8-openjdk-17 AS build
+FROM maven:3.8.8 AS build
 WORKDIR /app
 
 # Copiar wrapper y pom primero para aprovechar cache
