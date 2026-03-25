@@ -1,4 +1,6 @@
-<<<<<<< HEAD
+# Invento-Accion
+
+Proyecto Escolar
 
 ## Requisitos
 - Java 17
@@ -30,7 +32,3 @@
 ## Notas
 - Proyecto intencionalmente simple para servir de esqueleto.
 - Para producción: migrar a PostgreSQL, añadir seguridad (Spring Security + JWT), validaciones y pruebas.
-=======
-# Invento-Accion
-Proyecto Escolar
->>>>>>> 08f943de6a719d474c3693973886aa260dd2fb16
