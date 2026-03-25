@@ -11,6 +11,7 @@ RUN chmod +x mvnw
 
 # Copiar código fuente y construir
 COPY src ./src
+RUN sed -i 's/\r$//' mvnw && chmod +x mvnw
 RUN ./mvnw -B -DskipTests package
 # Normalizar nombre del jar para la siguiente etapa
 RUN cp target/*.jar app.jar
