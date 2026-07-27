@@ -2,3 +2,9 @@ target/
 .DS_Store
 invento-scripts/
 .DS_Store
+
+# Configuración local de Visual Studio Code
+.vscode/
+
+# Respaldos locales generados durante cambios o pruebas
+respaldos-locales/
