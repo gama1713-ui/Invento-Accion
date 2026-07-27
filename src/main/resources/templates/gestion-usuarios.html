@@ -353,6 +353,19 @@
         </div>
       </div>
 
+      <!-- Mensajes de registro de usuarios -->
+      <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle"></i>
+        <span th:text="${success}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+      </div>
+
+      <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span th:text="${error}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+      </div>
+
       <!-- Management Actions -->
       <div class="row">
         <div class="col-md-4">
@@ -362,11 +375,34 @@
             </div>
             <h3 class="management-title">Crear Usuario</h3>
             <p class="management-description">
-              Agregue nuevos usuarios al sistema con roles y permisos específicos.
+              Registre usuarios con documento, nombres, correo electrónico y teléfono de contacto.
             </p>
-            <button class="btn btn-management w-100" onclick="alert('Funcionalidad próximamente disponible')">
-              <i class="fas fa-plus"></i> Crear Usuario
-            </button>
+
+            <form th:action="@{/gestion/usuarios/registrar}" method="post">
+              <div class="mb-2">
+                <input type="text" class="form-control" name="documentoIdentidad" placeholder="Documento de identidad" required>
+              </div>
+
+              <div class="mb-2">
+                <input type="text" class="form-control" name="nombre" placeholder="Nombre" required>
+              </div>
+
+              <div class="mb-2">
+                <input type="text" class="form-control" name="apellidos" placeholder="Apellidos" required>
+              </div>
+
+              <div class="mb-2">
+                <input type="email" class="form-control" name="email" placeholder="Correo electrónico" required>
+              </div>
+
+              <div class="mb-3">
+                <input type="text" class="form-control" name="telefonoContacto" placeholder="Teléfono de contacto" required>
+              </div>
+
+              <button type="submit" class="btn btn-management w-100">
+                <i class="fas fa-plus"></i> Registrar Usuario
+              </button>
+            </form>
           </div>
         </div>
         <div class="col-md-4">
@@ -411,27 +447,37 @@
                 <thead>
                   <tr>
                     <th>ID</th>
+                    <th>Documento</th>
                     <th>Nombre</th>
-                    <th>Email</th>
+                    <th>Apellidos</th>
+                    <th>Correo electrónico</th>
+                    <th>Teléfono</th>
                     <th>Rol</th>
-                    <th>Estado</th>
-                    <th>Último Acceso</th>
                     <th>Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>Administrador</td>
-                    <td>admin@inventoaccion.com</td>
-                    <td><span class="badge bg-primary">Administrador</span></td>
-                    <td><span class="badge bg-success">Activo</span></td>
-                    <td>2026-03-05 23:20</td>
+                  <tr th:if="${#lists.isEmpty(usuarios)}">
+                    <td colspan="8" class="text-center text-muted">
+                      No hay usuarios registrados.
+                    </td>
+                  </tr>
+
+                  <tr th:each="usuario : ${usuarios}">
+                    <td th:text="${usuario.id}">1</td>
+                    <td th:text="${usuario.documentoIdentidad}">1000000000</td>
+                    <td th:text="${usuario.nombre}">Nombre</td>
+                    <td th:text="${usuario.apellidos}">Apellidos</td>
+                    <td th:text="${usuario.email}">correo@ejemplo.com</td>
+                    <td th:text="${usuario.telefonoContacto}">3000000000</td>
                     <td>
-                      <button class="btn btn-sm btn-outline-primary me-1" onclick="alert('Funcionalidad próximamente disponible')">
+                      <span class="badge bg-primary" th:text="${usuario.rol}">USUARIO</span>
+                    </td>
+                    <td>
+                      <button class="btn btn-sm btn-outline-primary me-1" type="button" onclick="alert('Funcionalidad próximamente disponible')">
                         <i class="fas fa-edit"></i>
                       </button>
-                      <button class="btn btn-sm btn-outline-danger" onclick="alert('Funcionalidad próximamente disponible')">
+                      <button class="btn btn-sm btn-outline-danger" type="button" onclick="alert('Funcionalidad próximamente disponible')">
                         <i class="fas fa-trash"></i>
                       </button>
                     </td>
