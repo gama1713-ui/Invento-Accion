@@ -1,7 +1,6 @@
 package com.inventoaccion.controller;
 
-import com.inventoaccion.model.Usuario;
-import com.inventoaccion.repository.UsuarioRepository;
+import com.inventoaccion.mongo.service.UsuarioMongoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,15 +11,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class UsuarioController {
 
-    private final UsuarioRepository usuarioRepository;
+    private final UsuarioMongoService usuarioMongoService;
 
-    public UsuarioController(UsuarioRepository usuarioRepository) {
-        this.usuarioRepository = usuarioRepository;
+    public UsuarioController(UsuarioMongoService usuarioMongoService) {
+        this.usuarioMongoService = usuarioMongoService;
     }
 
     @GetMapping("/gestion/usuarios")
     public String gestionUsuarios(Model model) {
-        model.addAttribute("usuarios", usuarioRepository.findAll());
+        model.addAttribute("usuarios", usuarioMongoService.listarUsuarios());
         return "gestion-usuarios";
     }
 
@@ -33,22 +32,26 @@ public class UsuarioController {
             @RequestParam String telefonoContacto,
             RedirectAttributes redirectAttributes) {
 
-        if (usuarioRepository.existsByDocumentoIdentidadOrEmail(documentoIdentidad, email)) {
+        String documentoLimpio = documentoIdentidad.trim();
+        String nombreLimpio = nombre.trim();
+        String apellidosLimpio = apellidos.trim();
+        String emailLimpio = email.trim().toLowerCase();
+        String telefonoLimpio = telefonoContacto.trim();
+
+        if (usuarioMongoService.existeUsuario(documentoLimpio, emailLimpio)) {
             redirectAttributes.addFlashAttribute("error", "El documento de identidad o el correo electrónico ya se encuentra registrado.");
             return "redirect:/gestion/usuarios";
         }
 
-        Usuario usuario = new Usuario();
-        usuario.setDocumentoIdentidad(documentoIdentidad);
-        usuario.setNombre(nombre);
-        usuario.setApellidos(apellidos);
-        usuario.setEmail(email);
-        usuario.setTelefonoContacto(telefonoContacto);
-        usuario.setRol("USUARIO");
+        usuarioMongoService.registrarUsuario(
+                documentoLimpio,
+                nombreLimpio,
+                apellidosLimpio,
+                emailLimpio,
+                telefonoLimpio
+        );
 
-        usuarioRepository.save(usuario);
-
-        redirectAttributes.addFlashAttribute("success", "Usuario registrado correctamente.");
+        redirectAttributes.addFlashAttribute("success", "Usuario registrado correctamente en MongoDB Atlas.");
         return "redirect:/gestion/usuarios";
     }
 }
