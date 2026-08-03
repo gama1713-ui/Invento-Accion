@@ -1,9 +1,24 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="utf-8"/><title>Resumen</title></head>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Resumen del tablero</title>
+  <link rel="stylesheet" th:href="@{/assets/digigram/css/bootstrap.css}"/>
+  <link rel="stylesheet" th:href="@{/css/main.css}"/>
+  <link rel="stylesheet" th:href="@{/css/custom.css}"/>
+</head>
 <body>
-  <h1>Resumen del tablero</h1>
-  <p>Vista general del inventario y estado actual.</p>
-  <a th:href="@{/}">Volver al inicio</a>
+  <main class="container mt-4">
+    <h1>Resumen del tablero</h1>
+    <p>Vista general del inventario y estado actual.</p>
+    <div id="react-dashboard-root"></div>
+    <div class="mt-4">
+      <a class="btn btn-secondary" th:href="@{/}">Volver al inicio</a>
+    </div>
+  </main>
+  <script th:src="@{/vendor/react/react.production.min.js}"></script>
+  <script th:src="@{/vendor/react/react-dom.production.min.js}"></script>
+  <script th:src="@{/js/react/dashboard-inventario.js}"></script>
 </body>
 </html>
