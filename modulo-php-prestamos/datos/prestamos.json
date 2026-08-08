@@ -1,0 +1,26 @@
+[
+    {
+        "colaborador": "Pepito Perez",
+        "elemento": "cable hdmi",
+        "fechaPrestamo": "2026-08-05",
+        "fechaDevolucion": "2026-08-10",
+        "observaciones": "PlacaMetalica0001",
+        "estado": "Activo"
+    },
+    {
+        "colaborador": "Condorito Gomez",
+        "elemento": "Combo Mouse+Teclado",
+        "fechaPrestamo": "2026-08-03",
+        "fechaDevolucion": "2026-08-14",
+        "observaciones": "PlacaMetalica0002",
+        "estado": "Activo"
+    },
+    {
+        "colaborador": "Maria Salome",
+        "elemento": "Monitor-Pantalla-Tvs",
+        "fechaPrestamo": "2026-07-27",
+        "fechaDevolucion": "2026-08-05",
+        "observaciones": "PlacaMetalica0003",
+        "estado": "Activo"
+    }
+]
