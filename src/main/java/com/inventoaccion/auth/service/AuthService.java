@@ -22,10 +22,11 @@ import com.inventoaccion.auth.repository.AuthUsuarioRepository;
  * cifrar la contrasena con BCrypt,
  * guardar el usuario en MongoDB,
  * validar el correo por token,
- * e iniciar sesion.
+ * iniciar sesion,
+ * e intentar enviar las credenciales por correo electronico.
  *
- * Por ahora esta en modo educativo/local.
- * Mas adelante se conectara con un servicio de correo real.
+ * Si el correo SMTP no esta configurado, el modulo sigue funcionando
+ * en modo educativo para pruebas con Postman o cURL.
  */
 @Service
 public class AuthService {
@@ -37,6 +38,14 @@ public class AuthService {
     private final AuthUsuarioRepository authUsuarioRepository;
 
     /*
+     * Servicio encargado de enviar correos electronicos.
+     *
+     * Se usa para enviar username, contrasena temporal
+     * y enlace de validacion cuando SMTP este configurado.
+     */
+    private final EmailService emailService;
+
+    /*
      * Objeto usado para cifrar y validar contrasenas.
      * BCrypt permite guardar contrasenas de forma segura.
      */
@@ -45,10 +54,15 @@ public class AuthService {
     /*
      * Constructor del servicio.
      *
-     * Spring Boot inyecta automaticamente el repositorio.
+     * Spring Boot inyecta automaticamente el repositorio
+     * y el servicio de correo.
      */
-    public AuthService(AuthUsuarioRepository authUsuarioRepository) {
+    public AuthService(
+            AuthUsuarioRepository authUsuarioRepository,
+            EmailService emailService
+    ) {
         this.authUsuarioRepository = authUsuarioRepository;
+        this.emailService = emailService;
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
@@ -61,6 +75,7 @@ public class AuthService {
      * Cifra la contrasena.
      * Genera un token para validar correo.
      * Guarda todo en MongoDB.
+     * Intenta enviar correo si SMTP esta configurado.
      */
     public AuthResponse registrar(RegistroAuthRequest request) {
 
@@ -122,6 +137,33 @@ public class AuthService {
         authUsuarioRepository.save(usuario);
 
         /*
+         * Se intenta enviar el correo si el servicio SMTP esta disponible.
+         *
+         * Si SMTP no esta configurado, el registro no se rompe.
+         * Si el envio falla, el usuario ya queda creado en MongoDB.
+         */
+        String mensajeCorreo = "";
+
+        if (emailService.correoDisponible()) {
+            try {
+                emailService.enviarCredenciales(
+                        correoLimpio,
+                        nombreLimpio,
+                        username,
+                        passwordTemporal,
+                        tokenValidacion
+                );
+
+                mensajeCorreo = " Correo enviado correctamente.";
+            } catch (Exception ex) {
+                mensajeCorreo = " Usuario creado, pero no fue posible enviar el correo: "
+                        + ex.getMessage();
+            }
+        } else {
+            mensajeCorreo = " Servicio SMTP no configurado; se mantiene modo educativo.";
+        }
+
+        /*
          * Modo educativo:
          * Por ahora se devuelve username, contrasena temporal y token en el mensaje
          * para poder probar con Postman.
@@ -129,8 +171,9 @@ public class AuthService {
          * En la version con correo real, estos datos se enviaran por email
          * y no se mostraran en la respuesta.
          */
-        String mensaje = "Usuario creado en modo educativo. "
-                + "Username: " + username
+        String mensaje = "Usuario creado en modo educativo."
+                + mensajeCorreo
+                + " Username: " + username
                 + " | Password temporal: " + passwordTemporal
                 + " | Token validacion: " + tokenValidacion;
 
