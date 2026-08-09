@@ -14,8 +14,9 @@ import org.springframework.stereotype.Service;
  * contrasena temporal,
  * enlace de validacion de correo.
  *
- * Se usa ObjectProvider para evitar que la aplicacion falle
- * si todavia no estan configuradas las variables SMTP.
+ * Importante:
+ * El envio de correo solo se activa si las variables SMTP estan configuradas.
+ * Si no estan configuradas, el sistema sigue funcionando en modo educativo.
  */
 @Service
 public class EmailService {
@@ -23,47 +24,74 @@ public class EmailService {
     /*
      * Proveedor opcional de JavaMailSender.
      *
-     * Si el servidor SMTP esta configurado, Spring Boot entrega
-     * un JavaMailSender disponible.
-     *
-     * Si el servidor SMTP no esta configurado, la aplicacion puede
-     * seguir levantando sin romper el arranque.
+     * Spring puede crear este objeto aunque las credenciales SMTP esten vacias.
+     * Por eso no basta con validar si existe JavaMailSender.
      */
     private final ObjectProvider<JavaMailSender> mailSenderProvider;
 
     /*
      * URL base de la aplicacion.
      *
-     * Si no se configura app.base-url, el servicio usara una URL local
-     * construida en el metodo obtenerBaseUrl().
+     * En local puede quedar vacia.
+     * Si queda vacia, el metodo obtenerBaseUrl usa localhost internamente.
      */
     @Value("${app.base-url:}")
     private String appBaseUrl;
 
     /*
-     * Constructor del servicio.
+     * Host SMTP.
      *
-     * Spring Boot inyecta el proveedor de JavaMailSender si esta disponible.
+     * Ejemplo en Render:
+     * MAIL_HOST=smtp.gmail.com
+     */
+    @Value("${spring.mail.host:}")
+    private String mailHost;
+
+    /*
+     * Usuario SMTP.
+     *
+     * Normalmente corresponde al correo remitente.
+     */
+    @Value("${spring.mail.username:}")
+    private String mailUsername;
+
+    /*
+     * Password SMTP.
+     *
+     * Debe configurarse por variable de entorno.
+     * No debe guardarse en GitHub.
+     */
+    @Value("${spring.mail.password:}")
+    private String mailPassword;
+
+    /*
+     * Constructor del servicio.
      */
     public EmailService(ObjectProvider<JavaMailSender> mailSenderProvider) {
         this.mailSenderProvider = mailSenderProvider;
     }
 
     /*
-     * Verifica si el servicio de correo esta disponible.
+     * Verifica si el correo esta realmente disponible.
      *
-     * Retorna true si existe configuracion SMTP.
-     * Retorna false si todavia no se ha configurado correo.
+     * No valida solamente JavaMailSender, porque Spring puede crearlo
+     * aunque MAIL_HOST, MAIL_USERNAME y MAIL_PASSWORD esten vacios.
+     *
+     * Retorna true solo si:
+     * - existe JavaMailSender
+     * - mailHost tiene valor
+     * - mailUsername tiene valor
+     * - mailPassword tiene valor
      */
     public boolean correoDisponible() {
-        return mailSenderProvider.getIfAvailable() != null;
+        return mailSenderProvider.getIfAvailable() != null
+                && tieneTexto(mailHost)
+                && tieneTexto(mailUsername)
+                && tieneTexto(mailPassword);
     }
 
     /*
      * Envia el correo con las credenciales temporales.
-     *
-     * Este metodo se usara desde AuthService cuando el usuario
-     * se registre correctamente.
      */
     public void enviarCredenciales(
             String correoDestino,
@@ -73,24 +101,14 @@ public class EmailService {
             String tokenValidacion
     ) {
 
-        /*
-         * Se obtiene el servicio de envio de correo.
-         * Si no existe, se lanza un error controlado.
-         */
         JavaMailSender mailSender = mailSenderProvider.getIfAvailable();
 
-        if (mailSender == null) {
+        if (!correoDisponible() || mailSender == null) {
             throw new IllegalStateException("El servicio de correo no esta configurado.");
         }
 
-        /*
-         * Se construye el enlace de validacion.
-         */
         String enlaceValidacion = obtenerBaseUrl() + "/api/auth/validar?token=" + tokenValidacion;
 
-        /*
-         * Se construye el cuerpo del mensaje.
-         */
         String mensaje = construirMensaje(
                 nombre,
                 username,
@@ -98,28 +116,22 @@ public class EmailService {
                 enlaceValidacion
         );
 
-        /*
-         * Se crea el mensaje simple de correo.
-         */
         SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(correoDestino);
         email.setSubject("Credenciales de acceso - Invento-Accion");
         email.setText(mensaje);
 
-        /*
-         * Se envia el correo.
-         */
         mailSender.send(email);
     }
 
     /*
      * Obtiene la URL base de la aplicacion.
      *
-     * Si app.base-url esta vacio, se usa localhost en el puerto 8080.
-     * Se arma por partes para evitar que el chat convierta la URL en enlace.
+     * Si app.base-url esta vacia, usa localhost en puerto 8080.
+     * Se arma por partes para evitar problemas de pegado con enlaces.
      */
     private String obtenerBaseUrl() {
-        if (appBaseUrl == null || appBaseUrl.trim().isEmpty()) {
+        if (!tieneTexto(appBaseUrl)) {
             return "http" + "://localhost:8080";
         }
 
@@ -127,10 +139,7 @@ public class EmailService {
     }
 
     /*
-     * Construye el texto del correo.
-     *
-     * Se separa en un metodo privado para mantener el codigo ordenado
-     * y facil de entender.
+     * Construye el mensaje que recibira el usuario.
      */
     private String construirMensaje(
             String nombre,
@@ -154,5 +163,12 @@ public class EmailService {
         mensaje.append("Equipo Invento-Accion");
 
         return mensaje.toString();
+    }
+
+    /*
+     * Valida si un texto tiene contenido real.
+     */
+    private boolean tieneTexto(String valor) {
+        return valor != null && !valor.trim().isEmpty();
     }
 }
