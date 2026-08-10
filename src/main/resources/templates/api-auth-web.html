@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Auth Web - Invento Accion</title>
+
+  <!-- Bootstrap permite que la pantalla se vea ordenada y responsive. -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+  <!-- Iconos visuales para mejorar la presentacion del modulo. -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --azul-principal: #2563eb;
+      --azul-oscuro: #1e40af;
+      --verde: #10b981;
+      --rojo: #ef4444;
+      --amarillo: #f59e0b;
+      --gris-fondo: #f3f4f6;
+      --gris-texto: #374151;
+    }
+
+    body {
+      background: var(--gris-fondo);
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--gris-texto);
+    }
+
+    .hero-auth {
+      background: linear-gradient(135deg, var(--azul-principal), var(--azul-oscuro));
+      color: white;
+      padding: 55px 0;
+      margin-bottom: 30px;
+    }
+
+    .hero-auth h1 {
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .hero-auth p {
+      max-width: 850px;
+      margin: 0 auto;
+      opacity: 0.95;
+    }
+
+    .card-auth {
+      border: none;
+      border-radius: 18px;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.10);
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .card-auth .card-header {
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 18px 20px;
+      font-weight: 700;
+    }
+
+    .step-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--azul-principal);
+      color: white;
+      font-weight: 700;
+      margin-right: 10px;
+    }
+
+    .btn-auth {
+      background: var(--azul-principal);
+      border: none;
+      color: white;
+      font-weight: 700;
+      border-radius: 10px;
+      padding: 10px 16px;
+    }
+
+    .btn-auth:hover {
+      background: var(--azul-oscuro);
+      color: white;
+    }
+
+    .btn-outline-auth {
+      border: 1px solid var(--azul-principal);
+      color: var(--azul-principal);
+      font-weight: 700;
+      border-radius: 10px;
+      padding: 10px 16px;
+      background: white;
+    }
+
+    .btn-outline-auth:hover {
+      background: var(--azul-principal);
+      color: white;
+    }
+
+    .estado-box {
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.10);
+      padding: 22px;
+      position: sticky;
+      top: 20px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      background: #e5e7eb;
+      color: #374151;
+      margin-bottom: 10px;
+    }
+
+    .status-ok {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .status-error {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .status-info {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .mini-panel {
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 14px;
+      background: #f9fafb;
+      margin-top: 12px;
+    }
+
+    .mini-label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      color: #6b7280;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+
+    .mini-value {
+      word-break: break-word;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 0.92rem;
+      color: #111827;
+    }
+
+    pre {
+      background: #111827;
+      color: #d1d5db;
+      padding: 16px;
+      border-radius: 14px;
+      min-height: 160px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 0.88rem;
+    }
+
+    .flow-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 12px;
+      padding: 12px;
+      border-radius: 14px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+    }
+
+    .flow-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #dbeafe;
+      color: var(--azul-principal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .small-help {
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+
+    .footer-auth {
+      text-align: center;
+      color: #6b7280;
+      padding: 30px 0;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <section class="hero-auth text-center">
+    <div class="container">
+      <h1><i class="fa-solid fa-shield-halved me-2"></i>Modulo visual API Auth</h1>
+      <p>
+        Pantalla publica para probar el servicio web de autenticacion de Invento Accion.
+        Desde aqui se puede registrar un usuario, validar el token e iniciar sesion consumiendo la API REST real conectada a MongoDB Atlas.
+      </p>
+    </div>
+  </section>
+
+  <main class="container mb-5">
+    <div class="row g-4">
+
+      <div class="col-lg-7">
+
+        <div class="card card-auth">
+          <div class="card-header">
+            <span class="step-badge">1</span>
+            Registro de usuario
+          </div>
+          <div class="card-body">
+            <p class="small-help">
+              Este formulario llama al endpoint <strong>POST /api/auth/registro</strong>.
+              La API crea el usuario, genera username, contrasena temporal y token de validacion.
+            </p>
+
+            <div class="mb-3">
+              <label for="registroNombre" class="form-label">Nombre completo</label>
+              <input type="text" id="registroNombre" class="form-control" placeholder="Ejemplo: Usuario Prueba Web">
+            </div>
+
+            <div class="mb-3">
+              <label for="registroCorreo" class="form-label">Correo electronico</label>
+              <input type="email" id="registroCorreo" class="form-control" placeholder="Ejemplo: usuario.web@pruebas.com">
+            </div>
+
+            <button class="btn btn-auth w-100" onclick="registrarUsuario()">
+              <i class="fa-solid fa-user-plus me-2"></i>Registrar usuario
+            </button>
+          </div>
+        </div>
+
+        <div class="card card-auth">
+          <div class="card-header">
+            <span class="step-badge">2</span>
+            Validacion de token
+          </div>
+          <div class="card-body">
+            <p class="small-help">
+              Este formulario llama al endpoint <strong>GET /api/auth/validar?token=...</strong>.
+              Sirve para activar el usuario antes de iniciar sesion.
+            </p>
+
+            <div class="mb-3">
+              <label for="tokenValidacion" class="form-label">Token de validacion</label>
+              <input type="text" id="tokenValidacion" class="form-control" placeholder="Pega aqui el token generado por el registro">
+            </div>
+
+            <button class="btn btn-outline-auth w-100" onclick="validarToken()">
+              <i class="fa-solid fa-envelope-circle-check me-2"></i>Validar token
+            </button>
+          </div>
+        </div>
+
+        <div class="card card-auth">
+          <div class="card-header">
+            <span class="step-badge">3</span>
+            Inicio de sesion
+          </div>
+          <div class="card-body">
+            <p class="small-help">
+              Este formulario llama al endpoint <strong>POST /api/auth/login</strong>.
+              La API valida el username y la contrasena contra los registros guardados en MongoDB Atlas.
+            </p>
+
+            <div class="mb-3">
+              <label for="loginUsername" class="form-label">Usuario</label>
+              <input type="text" id="loginUsername" class="form-control" placeholder="Ejemplo: render.test">
+            </div>
+
+            <div class="mb-3">
+              <label for="loginPassword" class="form-label">Contrasena</label>
+              <input type="password" id="loginPassword" class="form-control" placeholder="Contrasena temporal">
+            </div>
+
+            <button class="btn btn-auth w-100" onclick="iniciarSesion()">
+              <i class="fa-solid fa-right-to-bracket me-2"></i>Iniciar sesion
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-lg-5">
+        <div class="estado-box">
+          <h4 class="mb-3">
+            <i class="fa-solid fa-chart-line me-2 text-primary"></i>
+            Estado del servicio web
+          </h4>
+
+          <div id="estadoGeneral" class="status-pill status-info">
+            <i class="fa-solid fa-circle-info"></i>
+            Esperando accion del usuario
+          </div>
+
+          <div class="mini-panel">
+            <div class="mini-label">API consumida</div>
+            <div class="mini-value" id="apiConsumida">Sin solicitud enviada</div>
+          </div>
+
+          <div class="mini-panel">
+            <div class="mini-label">Usuario generado</div>
+            <div class="mini-value" id="usuarioGenerado">Pendiente</div>
+          </div>
+
+          <div class="mini-panel">
+            <div class="mini-label">Token de validacion</div>
+            <div class="mini-value" id="tokenGenerado">Pendiente</div>
+          </div>
+
+          <div class="mini-panel">
+            <div class="mini-label">Token de autenticacion</div>
+            <div class="mini-value" id="tokenAuth">Pendiente</div>
+          </div>
+
+          <hr>
+
+          <h6 class="fw-bold">Flujo visual</h6>
+
+          <div class="flow-item">
+            <div class="flow-icon"><i class="fa-solid fa-user-plus"></i></div>
+            <div>
+              <strong>Registro</strong>
+              <div class="small-help">Crea el usuario en MongoDB Atlas.</div>
+            </div>
+          </div>
+
+          <div class="flow-item">
+            <div class="flow-icon"><i class="fa-solid fa-envelope-circle-check"></i></div>
+            <div>
+              <strong>Validacion</strong>
+              <div class="small-help">Activa el correo usando el token generado.</div>
+            </div>
+          </div>
+
+          <div class="flow-item">
+            <div class="flow-icon"><i class="fa-solid fa-lock-open"></i></div>
+            <div>
+              <strong>Login</strong>
+              <div class="small-help">Valida usuario y contrasena contra la API Auth.</div>
+            </div>
+          </div>
+
+          <h6 class="fw-bold mt-3">Respuesta tecnica de la API</h6>
+          <pre id="respuestaApi">Aqui se mostrara la respuesta JSON del servicio web.</pre>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer-auth">
+    Invento Accion - Modulo visual educativo para pruebas de autenticacion con API REST y MongoDB Atlas.
+  </footer>
+
+  <script>
+    /*
+     * Cambia el estado visual de la pantalla.
+     *
+     * tipo puede ser:
+     * info
+     * ok
+     * error
+     */
+    function actualizarEstado(tipo, mensaje) {
+      const estado = document.getElementById("estadoGeneral");
+
+      estado.className = "status-pill";
+
+      if (tipo === "ok") {
+        estado.classList.add("status-ok");
+        estado.innerHTML = '<i class="fa-solid fa-circle-check"></i> ' + mensaje;
+      } else if (tipo === "error") {
+        estado.classList.add("status-error");
+        estado.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> ' + mensaje;
+      } else {
+        estado.classList.add("status-info");
+        estado.innerHTML = '<i class="fa-solid fa-circle-info"></i> ' + mensaje;
+      }
+    }
+
+    /*
+     * Muestra la respuesta JSON de la API en el panel tecnico.
+     */
+    function mostrarRespuesta(data) {
+      document.getElementById("respuestaApi").textContent = JSON.stringify(data, null, 2);
+    }
+
+    /*
+     * Extrae informacion del mensaje educativo devuelto por la API.
+     *
+     * En esta fase la API devuelve username, password temporal y token
+     * para facilitar pruebas visuales, Postman y cURL.
+     */
+    function extraerDatosEducativos(mensaje) {
+      const usernameMatch = mensaje.match(/Username:\s*([^|]+)/);
+      const passwordMatch = mensaje.match(/Password temporal:\s*([^|]+)/);
+      const tokenMatch = mensaje.match(/Token validacion:\s*([a-zA-Z0-9-]+)/);
+
+      if (usernameMatch && usernameMatch[1]) {
+        const username = usernameMatch[1].trim();
+        document.getElementById("usuarioGenerado").textContent = username;
+        document.getElementById("loginUsername").value = username;
+      }
+
+      if (passwordMatch && passwordMatch[1]) {
+        const password = passwordMatch[1].trim();
+        document.getElementById("loginPassword").value = password;
+      }
+
+      if (tokenMatch && tokenMatch[1]) {
+        const token = tokenMatch[1].trim();
+        document.getElementById("tokenGenerado").textContent = token;
+        document.getElementById("tokenValidacion").value = token;
+      }
+    }
+
+    /*
+     * Registra un usuario usando la API real.
+     *
+     * Endpoint:
+     * POST /api/auth/registro
+     */
+    async function registrarUsuario() {
+      const nombre = document.getElementById("registroNombre").value.trim();
+      const correo = document.getElementById("registroCorreo").value.trim();
+
+      if (!nombre || !correo) {
+        actualizarEstado("error", "Nombre y correo son obligatorios");
+        return;
+      }
+
+      document.getElementById("apiConsumida").textContent = "POST /api/auth/registro";
+      actualizarEstado("info", "Enviando registro a la API");
+
+      try {
+        const response = await fetch("/api/auth/registro", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            nombre: nombre,
+            correo: correo
+          })
+        });
+
+        const data = await response.json();
+        mostrarRespuesta(data);
+
+        if (response.ok && data.exitoso) {
+          actualizarEstado("ok", "Usuario registrado correctamente");
+          extraerDatosEducativos(data.mensaje || "");
+        } else {
+          actualizarEstado("error", data.mensaje || "No fue posible registrar el usuario");
+        }
+      } catch (error) {
+        actualizarEstado("error", "Error al conectar con la API");
+        mostrarRespuesta({
+          error: error.message
+        });
+      }
+    }
+
+    /*
+     * Valida el token generado durante el registro.
+     *
+     * Endpoint:
+     * GET /api/auth/validar?token=...
+     */
+    async function validarToken() {
+      const token = document.getElementById("tokenValidacion").value.trim();
+
+      if (!token) {
+        actualizarEstado("error", "El token de validacion es obligatorio");
+        return;
+      }
+
+      document.getElementById("apiConsumida").textContent = "GET /api/auth/validar?token=...";
+      actualizarEstado("info", "Validando token con la API");
+
+      try {
+        const response = await fetch("/api/auth/validar?token=" + encodeURIComponent(token));
+        const data = await response.json();
+
+        mostrarRespuesta(data);
+
+        if (response.ok && data.exitoso) {
+          actualizarEstado("ok", "Correo validado correctamente");
+        } else {
+          actualizarEstado("error", data.mensaje || "Token invalido o ya utilizado");
+        }
+      } catch (error) {
+        actualizarEstado("error", "Error al validar el token");
+        mostrarRespuesta({
+          error: error.message
+        });
+      }
+    }
+
+    /*
+     * Inicia sesion usando username y contrasena.
+     *
+     * Endpoint:
+     * POST /api/auth/login
+     */
+    async function iniciarSesion() {
+      const username = document.getElementById("loginUsername").value.trim();
+      const password = document.getElementById("loginPassword").value.trim();
+
+      if (!username || !password) {
+        actualizarEstado("error", "Usuario y contrasena son obligatorios");
+        return;
+      }
+
+      document.getElementById("apiConsumida").textContent = "POST /api/auth/login";
+      actualizarEstado("info", "Validando credenciales con la API");
+
+      try {
+        const response = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            username: username,
+            password: password
+          })
+        });
+
+        const data = await response.json();
+        mostrarRespuesta(data);
+
+        if (response.ok && data.exitoso) {
+          actualizarEstado("ok", "Autenticacion satisfactoria");
+          document.getElementById("tokenAuth").textContent = data.token || "Sin token devuelto";
+        } else {
+          actualizarEstado("error", data.mensaje || "Error de autenticacion");
+          document.getElementById("tokenAuth").textContent = "Pendiente";
+        }
+      } catch (error) {
+        actualizarEstado("error", "Error al iniciar sesion");
+        mostrarRespuesta({
+          error: error.message
+        });
+      }
+    }
+  </script>
+
+</body>
+</html>
