@@ -1,0 +1,38 @@
+[
+  {
+    "codigo": "INV-001",
+    "nombre": "Portatil Lenovo",
+    "categoria": "Tecnologia",
+    "ubicacion": "Bodega principal",
+    "unidadMedida": "Unidad",
+    "cantidadActual": 12,
+    "stockMinimo": 3,
+    "etiquetaQr": "QR-INV-001",
+    "estado": "Disponible",
+    "ultimaActualizacion": "2026-09-06T20:40:00-05:00"
+  },
+  {
+    "codigo": "INV-002",
+    "nombre": "Teclado USB",
+    "categoria": "Accesorios",
+    "ubicacion": "Bodega principal",
+    "unidadMedida": "Unidad",
+    "cantidadActual": 25,
+    "stockMinimo": 5,
+    "etiquetaQr": "QR-INV-002",
+    "estado": "Disponible",
+    "ultimaActualizacion": "2026-09-06T20:40:00-05:00"
+  },
+  {
+    "codigo": "INV-003",
+    "nombre": "Toner de impresora",
+    "categoria": "Suministros",
+    "ubicacion": "Almacen",
+    "unidadMedida": "Unidad",
+    "cantidadActual": 2,
+    "stockMinimo": 5,
+    "etiquetaQr": "QR-INV-003",
+    "estado": "Existencia baja",
+    "ultimaActualizacion": "2026-09-06T20:40:00-05:00"
+  }
+]

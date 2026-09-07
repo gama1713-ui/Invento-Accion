@@ -8,3 +8,17 @@ invento-scripts/
 
 # Respaldos locales generados durante cambios o pruebas
 respaldos-locales/
+
+# Entorno virtual y archivos temporales de Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Variables locales y credenciales del modulo Python
+.env
+.env.local
+
+# Respaldo local del Dockerfile antes de integrar Inventarios
+Dockerfile.backup-*
+Dockerfile.inventarios-candidato

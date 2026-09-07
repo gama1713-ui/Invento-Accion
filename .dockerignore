@@ -10,3 +10,10 @@ node_modules/
 README.md
 CHANGELOG.md
 TODO.md
+
+# Entorno virtual, credenciales y archivos temporales de Python
+.venv/
+.env
+.env.local
+__pycache__/
+*.py[cod]
