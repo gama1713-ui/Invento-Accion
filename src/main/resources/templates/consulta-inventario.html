@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="copyright"
+        content="Invento Acción, Sistema de Gestión Tecnológica">
+
+  <title>Consulta Inventario | Invento Acción</title>
+
+  <!-- Bootstrap permite organizar el contenido y adaptar la página. -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+  <!-- Estilos utilizados por las páginas actuales de Invento-Acción. -->
+  <link rel="stylesheet" href="/assets/digigram/css/maicons.css">
+  <link rel="stylesheet" href="/assets/digigram/css/theme.css">
+  <link rel="stylesheet" href=ss
+
+  <!-- Font Awesome se utiliza para mostrar los iconos de la página. -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #2563eb;
+      --secondary: #1e40af;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --info: #06b6d4;
+      --light: #f3f4f6;
+      --dark: #1f2937;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--light);
+      color: var(--dark);
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .navbar {
+      background: linear-gradient(
+        135deg,
+        var(--primary) 0%,
+        var(--secondary) 100%
+      );
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
+      padding: 1rem 0;
+    }
+
+    .navbar-brand {
+      color: white !important;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .navbar-brand span {
+      color: var(--info);
+    }
+
+    .nav-link {
+      color: rgba(255, 255, 255, 0.85) !important;
+    }
+
+    .nav-link:hover,
+    .nav-link:focus {
+      color: white !important;
+    }
+
+    .encabezado-pagina {
+      padding: 4rem 0 6rem;
+      background: linear-gradient(
+        135deg,
+        var(--primary) 0%,
+        var(--secondary) 100%
+      );
+      color: white;
+    }
+
+    .contenedor-consulta {
+      margin-top: -3rem;
+      padding-bottom: 4rem;
+    }
+
+    .tarjeta-consulta {
+      border: 0;
+      border-radius: 1rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    .tarjeta-consulta .card-header {
+      padding: 1.25rem;
+      border-radius: 1rem 1rem 0 0;
+      background: white;
+    }
+
+    .tabla-contenedor {
+      overflow-x: auto;
+    }
+
+    .table thead th {
+      white-space: nowrap;
+      background: var(--secondary);
+      color: white;
+    }
+
+    .estado-disponible {
+      color: #065f46;
+      background: #d1fae5;
+    }
+
+    .estado-bajo {
+      color: #92400e;
+      background: #fef3c7;
+    }
+
+    .etiqueta-estado {
+      display: inline-block;
+      padding: 0.35rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .pie-pagina {
+      margin-top: auto;
+      padding: 1.5rem 0;
+      background: var(--dark);
+      color: #d1d5db;
+    }
+  </style>
+</head>
+
+<body class="d-flex flex-column">
+
+  <!-- Barra principal de navegación de Invento-Acción. -->
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand" th:href="@{/}">
+        Invento <span>Acción</span>
+      </a>
+
+      <button class="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarConsultaInventario"
+              aria-controls="navbarConsultaInventario"
+              aria-expanded="false"
+              aria-label="Mostrar navegación">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse"
+           id="navbarConsultaInventario">
+
+        <ul class="navbar-nav ms-auto">
+
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/}">
+              <i class="fas fa-home"></i>
+              Inicio
+            </a>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle active"
+               href="#"
+               id="navActivosConsulta"
+               role="button"
+               data-bs-toggle="dropdown"
+               aria-expanded="false">
+              <i class="fas fa-laptop"></i>
+              Activos
+            </a>
+
+            <ul class="dropdown-menu"
+                aria-labelledby="navActivosConsulta">
+
+              <li>
+                <a class="dropdown-item" th:href="@{/activos}">
+                  <i class="fas fa-list"></i>
+                  Gestión de Activos
+                </a>
+              </li>
+
+              <li>
+                <a class="dropdown-item active"
+                   th:href="@{/activos/consulta-inventario}">
+                  <i class="fas fa-search"></i>
+                  Consulta Inventario
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Presentación principal del módulo. -->
+  <header class="encabezado-pagina">
+    <div class="container text-center">
+      <i class="fas fa-boxes-stacked fa-3x mb-3"></i>
+
+      <h1 class="fw-bold">Consulta Inventario</h1>
+
+      <p class="lead mb-0">
+        Consulta información actualizada de inventarios desde
+        la API REST desarrollada en Python.
+      </p>
+    </div>
+  </header>
+
+  <main class="container contenedor-consulta flex-grow-1">
+    <section class="card tarjeta-consulta">
+
+      <div class="card-header">
+        <div class="row align-items-center g-3">
+
+          <div class="col-lg-5">
+            <h2 class="h4 mb-1">
+              <i class="fas fa-magnifying-glass text-primary"></i>
+              Buscar inventario
+            </h2>
+
+            <p class="text-muted mb-0">
+              Ingresa un código o consulta todos los registros.
+            </p>
+          </div>
+
+          <div class="col-lg-7">
+            <form id="formularioConsulta"
+                  class="row g-2"
+                  autocomplete="off">
+
+              <div class="col-md-7">
+                <label for="codigoInventario"
+                       class="visually-hidden">
+                  Código de inventario
+                </label>
+
+                <input type="text"
+                       id="codigoInventario"
+                       class="form-control"
+                       placeholder="Ejemplo: INV-001"
+                       maxlength="50">
+              </div>
+
+              <div class="col-md-5 d-grid gap-2 d-md-flex">
+                <button type="submit"
+                        class="btn btn-primary flex-fill">
+                  <i class="fas fa-search"></i>
+                  Consultar
+                </button>
+
+                <button type="button"
+                        id="botonMostrarTodos"
+                        class="btn btn-outline-primary flex-fill">
+                  <i class="fas fa-list"></i>
+                  Mostrar todos
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body">
+
+        <!-- Aquí se muestran mensajes de carga, éxito o error. -->
+        <div id="mensajeConsulta"
+             class="alert alert-info"
+             role="alert">
+          Presiona “Mostrar todos” o busca un inventario por código.
+        </div>
+
+        <!-- La tabla se completa dinámicamente desde JavaScript. -->
+        <div class="tabla-contenedor">
+          <table class="table table-striped table-hover align-middle">
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Nombre</th>
+                <th>Categoría</th>
+                <th>Ubicación</th>
+                <th>Unidad</th>
+                <th>Cantidad</th>
+                <th>Stock mínimo</th>
+                <th>Estado</th>
+                <th>Última actualización</th>
+              </tr>
+            </thead>
+
+            <tbody id="cuerpoTablaInventarios">
+              <tr>
+                <td colspan="9" class="text-center text-muted py-4">
+                  No se ha realizado ninguna consulta.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="pie-pagina">
+    <div class="container text-center">
+      <small>
+        Invento Acción | Módulo educativo de Consulta Inventario
+      </small>
+    </div>
+  </footer>
+
+  <!-- Dependencias visuales utilizadas por Invento-Acción. -->
+  <script src="/assets/digigram/js/jquery-3.5.1.min.js"></script>
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+  </script>
+
+  <script src="/assets/digigram/js/theme.js"></script>
+
+  <!-- Código encargado de consumir la API REST integrada. -->
+  <script src="/js/consulta-inventario.js"></script>
+</body>
+</html>
