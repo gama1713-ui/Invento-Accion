@@ -1,0 +1,53 @@
+{
+  "archivo_salida": "contratos_limpios.json",
+  "categorias_admitidas": [
+    "COMPRA_EQUIPOS",
+    "COMPRA_MIXTA",
+    "EQUIPOS_COMPLEMENTARIOS"
+  ],
+  "categorias_entrada": {
+    "ARRENDAMIENTO_COMODATO": 78,
+    "COMPRA_EQUIPOS": 672,
+    "COMPRA_MIXTA": 447,
+    "EQUIPOS_COMPLEMENTARIOS": 407,
+    "EXCLUIR_NO_TECNOLOGIA": 47,
+    "MANTENIMIENTO_SERVICIO": 116,
+    "SIN_CLASIFICAR": 1106,
+    "SOFTWARE_LICENCIAS": 127
+  },
+  "categorias_salida": {
+    "COMPRA_EQUIPOS": 606,
+    "COMPRA_MIXTA": 380,
+    "EQUIPOS_COMPLEMENTARIOS": 360
+  },
+  "codigo_unspsc": "V1.4321",
+  "estadisticas_valores": {
+    "maximo": 118365504220.0,
+    "mediana": 32947800.0,
+    "minimo": 189000.0,
+    "percentil_95": 908246047.28,
+    "percentil_99": 3460158858.0
+  },
+  "estados_excluidos": [
+    "Borrador",
+    "Cancelado"
+  ],
+  "fecha_procesamiento_utc": "2026-09-20T23:15:44+00:00",
+  "fuente": "SECOP II - Contratos Electronicos",
+  "motivos_exclusion": {
+    "CATEGORIA_NO_ADMITIDA": 839,
+    "ESTADO_CONTRATO_EXCLUIDO": 287,
+    "TIPO_CONTRATO_NO_ADMITIDO": 527,
+    "VALOR_SIMBOLICO": 1
+  },
+  "registros_entrada": 3000,
+  "registros_salida": 1346,
+  "sha256_entrada": "e1b7b474bbfe78bc87bca4da4b99725ce0ed7f8fb377317b84c17284030b9600",
+  "sha256_salida": "bc407db78ffe71b4041f34c502c0b09e04bfc8a1ac8b4ad3fbd92fab8c2f1319",
+  "tipos_contrato_admitidos": [
+    "Compraventa",
+    "Suministros"
+  ],
+  "valor_minimo_cop": 100000.0,
+  "version_preprocesador": "0.1.0"
+}
