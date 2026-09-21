@@ -170,6 +170,114 @@
 
         </div>
 
+        <div class="card border-primary mt-3 mb-3">
+          <div class="card-body">
+
+            <div
+              class="d-flex flex-wrap justify-content-between
+                     align-items-center gap-2 mb-3"
+            >
+              <div>
+                <h3 class="h5 mb-1">
+                  Ejemplos para realizar una búsqueda
+                </h3>
+
+                <p class="text-muted mb-0">
+                  Puedes ver un ejemplo, copiarlo al formulario
+                  y adaptarlo a tu necesidad.
+                </p>
+              </div>
+
+              <button
+                id="botonEjemploInventarioIa"
+                class="btn btn-outline-primary"
+                type="button"
+              >
+                Ver ejemplo aleatorio
+              </button>
+            </div>
+
+            <div
+              id="panelEjemploInventarioIa"
+              class="border rounded bg-light p-3"
+              hidden
+            >
+              <div class="mb-2">
+                <span class="badge bg-primary">
+                  Nivel
+                </span>
+
+                <strong
+                  id="nivelEjemploInventarioIa"
+                  class="ms-2"
+                >
+                  Básico
+                </strong>
+              </div>
+
+              <p
+                id="tituloEjemploInventarioIa"
+                class="fw-bold mb-1"
+              >
+                Ejemplo de compra
+              </p>
+
+              <p
+                id="textoEjemploInventarioIa"
+                class="mb-3"
+              ></p>
+
+              <div class="row g-2 small mb-3">
+                <div class="col-md-6">
+                  <strong>Valor total:</strong>
+                  <span id="valorEjemploInventarioIa"></span>
+                </div>
+
+                <div class="col-md-6">
+                  <strong>Categoría:</strong>
+                  <span id="categoriaEjemploInventarioIa"></span>
+                </div>
+
+                <div class="col-md-6">
+                  <strong>Departamento:</strong>
+                  <span id="departamentoEjemploInventarioIa"></span>
+                </div>
+
+                <div class="col-md-6">
+                  <strong>Modalidad:</strong>
+                  <span id="modalidadEjemploInventarioIa"></span>
+                </div>
+              </div>
+
+              <div class="d-flex flex-wrap gap-2">
+                <button
+                  id="botonUsarEjemploInventarioIa"
+                  class="btn btn-primary"
+                  type="button"
+                >
+                  Usar este ejemplo
+                </button>
+
+                <button
+                  id="botonOtroEjemploInventarioIa"
+                  class="btn btn-outline-secondary"
+                  type="button"
+                >
+                  Mostrar otro ejemplo
+                </button>
+              </div>
+
+              <p class="small text-muted mt-3 mb-0">
+                El ejemplo no se evalúa automáticamente. Puedes
+                modificar la descripción, el valor y los demás
+                campos antes de pulsar Evaluar compra.
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+
         <div
           class="alert alert-info mt-3 mb-2"
           role="status"
