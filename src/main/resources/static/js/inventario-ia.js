@@ -330,6 +330,252 @@ async function evaluarCompra(evento) {
 }
 
 
+const botonEjemploInventarioIa = document.getElementById(
+  "botonEjemploInventarioIa"
+);
+
+const botonOtroEjemploInventarioIa = document.getElementById(
+  "botonOtroEjemploInventarioIa"
+);
+
+const botonUsarEjemploInventarioIa = document.getElementById(
+  "botonUsarEjemploInventarioIa"
+);
+
+const panelEjemploInventarioIa = document.getElementById(
+  "panelEjemploInventarioIa"
+);
+
+const nivelEjemploInventarioIa = document.getElementById(
+  "nivelEjemploInventarioIa"
+);
+
+const tituloEjemploInventarioIa = document.getElementById(
+  "tituloEjemploInventarioIa"
+);
+
+const textoEjemploInventarioIa = document.getElementById(
+  "textoEjemploInventarioIa"
+);
+
+const valorEjemploInventarioIa = document.getElementById(
+  "valorEjemploInventarioIa"
+);
+
+const categoriaEjemploInventarioIa = document.getElementById(
+  "categoriaEjemploInventarioIa"
+);
+
+const departamentoEjemploInventarioIa = document.getElementById(
+  "departamentoEjemploInventarioIa"
+);
+
+const modalidadEjemploInventarioIa = document.getElementById(
+  "modalidadEjemploInventarioIa"
+);
+
+
+const ejemplosInventarioIa = [
+  {
+    nivel: "Básico",
+    titulo: "Compra de computadores portátiles",
+    descripcion:
+      "Adquisición de 10 computadores portátiles para uso administrativo.",
+    valor: 50000000,
+    categoria: "COMPRA_EQUIPOS",
+    departamento: "",
+    modalidad: "",
+    sector: "",
+    vecinos: 25
+  },
+  {
+    nivel: "Básico",
+    titulo: "Compra de monitores",
+    descripcion:
+      "Adquisición de 20 monitores para puestos de trabajo de oficina.",
+    valor: 24000000,
+    categoria: "EQUIPOS_COMPLEMENTARIOS",
+    departamento: "",
+    modalidad: "",
+    sector: "",
+    vecinos: 25
+  },
+  {
+    nivel: "Intermedio",
+    titulo: "Equipos para una sala de formación",
+    descripcion:
+      "Adquisición de 25 computadores portátiles, 25 mouse y 25 maletines para una sala de formación.",
+    valor: 145000000,
+    categoria: "COMPRA_MIXTA",
+    departamento: "Distrito Capital de Bogotá",
+    modalidad: "",
+    sector: "Educación Nacional",
+    vecinos: 30
+  },
+  {
+    nivel: "Intermedio",
+    titulo: "Renovación de puestos de trabajo",
+    descripcion:
+      "Compra de 30 computadores de escritorio, 30 monitores y periféricos para renovar puestos de trabajo administrativos.",
+    valor: 210000000,
+    categoria: "COMPRA_MIXTA",
+    departamento: "Cundinamarca",
+    modalidad: "Mínima cuantía",
+    sector: "",
+    vecinos: 30
+  },
+  {
+    nivel: "Avanzado",
+    titulo: "Infraestructura de servidores",
+    descripcion:
+      "Adquisición de servidores, sistema de almacenamiento, unidades de respaldo, UPS e instalación para fortalecer la infraestructura tecnológica institucional.",
+    valor: 950000000,
+    categoria: "EQUIPOS_COMPLEMENTARIOS",
+    departamento: "Antioquia",
+    modalidad: "Selección abreviada subasta inversa",
+    sector: "Servicio Público",
+    vecinos: 40
+  },
+  {
+    nivel: "Avanzado",
+    titulo: "Dotación tecnológica integral",
+    descripcion:
+      "Adquisición de computadores portátiles, monitores, estaciones de acoplamiento, licencias ofimáticas, configuración e instalación para personal administrativo.",
+    valor: 720000000,
+    categoria: "COMPRA_MIXTA",
+    departamento: "Distrito Capital de Bogotá",
+    modalidad: "Selección abreviada subasta inversa",
+    sector: "Educación Nacional",
+    vecinos: 40
+  },
+  {
+    nivel: "Súper avanzada",
+    titulo: "Modernización tecnológica institucional",
+    descripcion:
+      "Modernización tecnológica mediante la adquisición de 120 computadores portátiles, 60 computadores de escritorio, 160 monitores, periféricos, licencias, instalación, configuración, capacitación, garantía extendida y soporte técnico.",
+    valor: 3200000000,
+    categoria: "COMPRA_MIXTA",
+    departamento: "Distrito Capital de Bogotá",
+    modalidad: "Licitación pública",
+    sector: "Servicio Público",
+    vecinos: 60
+  },
+  {
+    nivel: "Súper avanzada",
+    titulo: "Centro de procesamiento y continuidad",
+    descripcion:
+      "Implementación de infraestructura tecnológica para centro de procesamiento de datos con servidores, almacenamiento, virtualización, respaldo, redes, UPS, instalación, migración, capacitación, garantía y mantenimiento especializado.",
+    valor: 5800000000,
+    categoria: "EQUIPOS_COMPLEMENTARIOS",
+    departamento: "Antioquia",
+    modalidad: "Licitación pública",
+    sector: "Tecnologías de la Información",
+    vecinos: 75
+  }
+];
+
+
+let indiceEjemploInventarioIa = -1;
+
+
+function nombreCategoriaEjemplo(codigo) {
+  const nombres = {
+    COMPRA_EQUIPOS: "Compra de equipos",
+    COMPRA_MIXTA: "Compra mixta",
+    EQUIPOS_COMPLEMENTARIOS: "Equipos complementarios"
+  };
+
+  return nombres[codigo] || "Detectar por descripción";
+}
+
+
+function seleccionarEjemploAleatorio() {
+  let nuevoIndice = Math.floor(
+    Math.random() * ejemplosInventarioIa.length
+  );
+
+  if (
+    ejemplosInventarioIa.length > 1
+    && nuevoIndice === indiceEjemploInventarioIa
+  ) {
+    nuevoIndice = (
+      nuevoIndice + 1
+    ) % ejemplosInventarioIa.length;
+  }
+
+  indiceEjemploInventarioIa = nuevoIndice;
+
+  const ejemplo = ejemplosInventarioIa[nuevoIndice];
+
+  nivelEjemploInventarioIa.textContent = ejemplo.nivel;
+  tituloEjemploInventarioIa.textContent = ejemplo.titulo;
+  textoEjemploInventarioIa.textContent = ejemplo.descripcion;
+
+  valorEjemploInventarioIa.textContent = formatearMoneda(
+    ejemplo.valor
+  );
+
+  categoriaEjemploInventarioIa.textContent =
+    nombreCategoriaEjemplo(ejemplo.categoria);
+
+  departamentoEjemploInventarioIa.textContent =
+    ejemplo.departamento || "No especificado";
+
+  modalidadEjemploInventarioIa.textContent =
+    ejemplo.modalidad || "No especificada";
+
+  panelEjemploInventarioIa.hidden = false;
+}
+
+
+function usarEjemploInventarioIa() {
+  if (indiceEjemploInventarioIa < 0) {
+    seleccionarEjemploAleatorio();
+  }
+
+  const ejemplo = ejemplosInventarioIa[
+    indiceEjemploInventarioIa
+  ];
+
+  descripcion.value = ejemplo.descripcion;
+  valorPropuesto.value = String(ejemplo.valor);
+  categoria.value = ejemplo.categoria;
+  departamento.value = ejemplo.departamento;
+  modalidad.value = ejemplo.modalidad;
+  sector.value = ejemplo.sector;
+  cantidadVecinos.value = String(ejemplo.vecinos);
+
+  mostrarMensaje(
+    "Ejemplo copiado. Puedes adaptarlo antes de evaluar la compra.",
+    "success"
+  );
+
+  formulario.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+
+  descripcion.focus();
+}
+
+
+botonEjemploInventarioIa.addEventListener(
+  "click",
+  seleccionarEjemploAleatorio
+);
+
+botonOtroEjemploInventarioIa.addEventListener(
+  "click",
+  seleccionarEjemploAleatorio
+);
+
+botonUsarEjemploInventarioIa.addEventListener(
+  "click",
+  usarEjemploInventarioIa
+);
+
+
+
 formulario.addEventListener("submit", evaluarCompra);
 
 comprobarServicio();
