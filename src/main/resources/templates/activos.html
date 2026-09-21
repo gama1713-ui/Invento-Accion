@@ -3,6 +3,11 @@
 <head><meta charset="utf-8"/><title>Activos</title></head>
 <body>
   <h1>Activos</h1>
+  <nav style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap">
+    <a th:href="@{/}">Inicio</a>
+    <a th:href="@{/activos/consulta-inventario}">Consulta Inventario</a>
+    <a th:href="@{/activos/inventario-ia}">Inventario IA</a>
+  </nav>
   <a th:href="@{/activos/nuevo}">Nuevo activo</a>
 
   <table border="1">
