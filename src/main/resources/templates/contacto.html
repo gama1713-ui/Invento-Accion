@@ -1,97 +1,22 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Contáctanos - Invento Acción</title>
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    /* Copied colores y estilos básicos del index */
-    :root { --primary: #2563eb; --secondary: #1e40af; --dark: #1f2937; }
-    body{font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color:var(--dark);line-height:1.6;}
-    .navbar{background:linear-gradient(135deg,var(--primary)0%,var(--secondary)100%);padding:1rem 0;}
-    .navbar-brand{color:#fff!important;font-weight:bold;} .nav-link{color:rgba(255,255,255,0.85)!important;}
-    .nav-link:hover{color:#fff!important;}
-  </style>
-</head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Contáctenos - Invento Acción</title>
+<meta name="description" content="Formulario de contacto del proyecto académico Invento Acción.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{--primary:#2563eb;--secondary:#1e40af;--dark:#1f2937;--muted:#64748b;--light:#f8fafc;--border:#e2e8f0}
+body{margin:0;font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;color:var(--dark);background:var(--light);line-height:1.7}.navbar{padding:1rem 0;background:linear-gradient(135deg,var(--primary),var(--secondary));box-shadow:0 4px 16px rgba(15,23,42,.15)}.navbar-brand{color:#fff!important;font-size:1.35rem;font-weight:700}.nav-link{padding:.55rem .75rem!important;color:rgba(255,255,255,.88)!important;border-radius:.5rem}.nav-link:hover,.nav-link.active{color:#fff!important;background:rgba(255,255,255,.15)}.hero{padding:4.5rem 0;color:#fff;background:linear-gradient(135deg,rgba(37,99,235,.97),rgba(30,64,175,.97))}.hero-label{display:inline-flex;align-items:center;gap:.5rem;margin-bottom:1.15rem;padding:.45rem .85rem;font-weight:600;border:1px solid rgba(255,255,255,.32);border-radius:999px;background:rgba(255,255,255,.12)}.hero h1{font-size:clamp(2.1rem,5vw,3.4rem);font-weight:800}.hero p{max-width:800px;color:rgba(255,255,255,.9);font-size:1.08rem}.section{padding:4rem 0}.section-title{margin-bottom:1rem;font-weight:800}.card-panel{height:100%;padding:1.75rem;border:1px solid var(--border);border-radius:1rem;background:#fff;box-shadow:0 10px 30px rgba(15,23,42,.06)}.channel{display:flex;gap:.9rem;align-items:flex-start;padding:1rem 0;border-bottom:1px solid var(--border)}.channel:last-child{border-bottom:0}.channel i{margin-top:.3rem;color:var(--primary);font-size:1.2rem}.form-label{font-weight:650}.form-control,.form-select{padding:.75rem;border-color:#cbd5e1}.form-control:focus,.form-select:focus{border-color:var(--primary);box-shadow:0 0 0 .2rem rgba(37,99,235,.15)}.privacy-note{padding:1rem;border-radius:.8rem;background:#eff6ff;border:1px solid #bfdbfe}.module-link{display:flex;align-items:center;gap:.7rem;height:100%;padding:1rem;color:var(--dark);text-decoration:none;border:1px solid var(--border);border-radius:.8rem;background:#fff}.module-link:hover{color:var(--primary);box-shadow:0 8px 22px rgba(15,23,42,.08)}footer{color:rgba(255,255,255,.82);background:#111827}
+</style></head>
 <body>
-  <!-- Header/Nav -->
-  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
-    <div class="container">
-      <a class="navbar-brand" href="/">Invento <span>Acción</span></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" th:href="@{/}">Inicio</a></li>
-          <li class="nav-item"><a class="nav-link" th:href="@{/nosotros}">Nosotros</a></li>
-          <li class="nav-item"><a class="nav-link" th:href="@{/contacto}">Contacto</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Contenido específico: Get in Touch (plantilla adaptada) -->
-  <section class="page-section">
-    <div class="container">
-      <div class="row align-items-center">
-        <div class="col-lg-6 py-3">
-          <h2 class="title-section">Ponte en <span class="marked">Contacto</span></h2>
-          <div class="divider"></div>
-          <p class="mb-3">Escríbenos para preguntas, soporte o información sobre Invento Acción.</p>
-
-          <ul class="list-unstyled">
-            <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> Medellín, Colombia</li>
-            <li class="mb-2"><i class="fas fa-envelope me-2"></i> <a href="mailto:soporte@inventoaccion.com">soporte@inventoaccion.com</a></li>
-            <li class="mb-2"><i class="fas fa-phone me-2"></i> <a href="tel:+573001234567">+57 300 123 45 67</a></li>
-          </ul>
-        </div>
-
-        <div class="col-lg-6 py-3">
-          <div class="subhead">Contáctanos</div>
-          <h2 class="title-section">Envíanos un mensaje</h2>
-          <div class="divider"></div>
-
-          <div th:if="${msg}" class="alert alert-success" th:text="${msg}"></div>
-          <form th:action="@{/contacto/enviar}" method="post">
-            <div class="py-2">
-              <input name="nombre" type="text" class="form-control" placeholder="Nombre completo" required>
-            </div>
-            <div class="py-2">
-              <input name="email" type="email" class="form-control" placeholder="Correo electrónico" required>
-            </div>
-            <div class="py-2">
-              <textarea name="mensaje" rows="6" class="form-control" placeholder="Tu mensaje" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary rounded-pill mt-3">Enviar mensaje</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer común -->
-  <footer class="bg-dark text-white py-4">
-    <div class="container text-center">
-      <small>&copy; 2026 Invento Acción.</small>
-    </div>
-  </footer>
-
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) { target.scrollIntoView({ behavior: 'smooth' }); }
-      });
-    });
-  </script>
-</body>
-</html>
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top" aria-label="Navegación principal"><div class="container"><a class="navbar-brand" th:href="@{/}">Invento <span>Acción</span></a><button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Mostrar navegación"><span class="navbar-toggler-icon"></span></button><div class="collapse navbar-collapse" id="navbarNav"><ul class="navbar-nav ms-auto"><li class="nav-item"><a class="nav-link" th:href="@{/}">Inicio</a></li><li class="nav-item"><a class="nav-link" th:href="@{/nosotros}">Nosotros</a></li><li class="nav-item"><a class="nav-link" th:href="@{/datos}">Tratamiento de datos</a></li><li class="nav-item"><a class="nav-link" th:href="@{/terminos}">Términos</a></li><li class="nav-item"><a class="nav-link" th:href="@{/privacidad}">Privacidad</a></li><li class="nav-item"><a class="nav-link" th:href="@{/soporte}">Soporte</a></li><li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/contacto}">Contáctenos</a></li></ul></div></div></nav>
+<header class="hero"><div class="container"><div class="hero-label"><i class="fas fa-envelope"></i>Canal de contacto</div><h1>Contáctanos</h1><p>Utiliza este formulario para solicitar orientación, reportar un error, presentar una consulta sobre datos personales o compartir una sugerencia.</p></div></header>
+<main>
+<section class="section"><div class="container"><div th:if="${msg}" class="alert alert-success" role="alert" th:text="${msg}"></div><div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div><div class="row g-4"><div class="col-lg-5"><aside class="card-panel"><h2 class="section-title h3">Antes de enviar</h2><p class="text-secondary">Incluye únicamente la información necesaria para comprender tu solicitud.</p><div class="channel"><i class="fas fa-circle-check"></i><div><strong>Describe el contexto</strong><div class="text-secondary">Indica el módulo, la acción realizada y el resultado observado.</div></div></div><div class="channel"><i class="fas fa-shield-halved"></i><div><strong>Protege tus credenciales</strong><div class="text-secondary">No envíes contraseñas, tokens, llaves ni secretos de acceso.</div></div></div><div class="channel"><i class="fas fa-database"></i><div><strong>Registro de la solicitud</strong><div class="text-secondary">La confirmación solo se mostrará cuando la solicitud quede almacenada y tenga un identificador.</div></div></div><div class="channel"><i class="fas fa-graduation-cap"></i><div><strong>Proyecto académico</strong><div class="text-secondary">Invento Acción se encuentra en desarrollo y este canal ofrece orientación sobre la plataforma.</div></div></div></aside></div><div class="col-lg-7"><section class="card-panel"><h2 class="section-title h3">Enviar una solicitud</h2><form th:action="@{/contacto/enviar}" method="post"><div class="row g-3"><div class="col-md-6"><label for="nombre" class="form-label">Nombre completo</label><input id="nombre" name="nombre" type="text" class="form-control" minlength="2" maxlength="100" autocomplete="name" required></div><div class="col-md-6"><label for="email" class="form-label">Correo electrónico</label><input id="email" name="email" type="email" class="form-control" maxlength="150" autocomplete="email" required></div><div class="col-md-6"><label for="tipo" class="form-label">Tipo de solicitud</label><select id="tipo" name="tipo" class="form-select" required><option value="" selected disabled>Selecciona una opción</option><option value="Soporte técnico">Soporte técnico</option><option value="Reporte de error">Reporte de error</option><option value="Datos personales">Consulta sobre datos personales</option><option value="Sugerencia">Sugerencia</option><option value="Información general">Información general</option></select></div><div class="col-md-6"><label for="asunto" class="form-label">Asunto</label><input id="asunto" name="asunto" type="text" class="form-control" minlength="3" maxlength="150" required></div><div class="col-12"><label for="mensaje" class="form-label">Mensaje</label><textarea id="mensaje" name="mensaje" rows="6" class="form-control" minlength="10" maxlength="2000" aria-describedby="contadorMensaje" required></textarea><div id="contadorMensaje" class="form-text">Entre 10 y 2000 caracteres. No incluyas contraseñas ni credenciales.</div></div><div class="col-12"><div class="privacy-note"><div class="form-check"><input id="autorizacion" name="autorizacion" value="true" type="checkbox" class="form-check-input" required><label for="autorizacion" class="form-check-label">Autorizo el uso de los datos suministrados únicamente para registrar y gestionar esta solicitud.</label></div><div class="mt-2 small">Consulta la información disponible en <a th:href="@{/datos}">Tratamiento de datos</a> y <a th:href="@{/privacidad}">Política de privacidad</a>.</div></div></div><div class="col-12"><button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-paper-plane me-2"></i>Registrar solicitud</button></div></div></form></section></div></div></div></section>
+<section class="section bg-white"><div class="container"><h2 class="section-title">Más información</h2><div class="row g-3"><div class="col-md-6 col-lg-3"><a class="module-link" th:href="@{/soporte}"><i class="fas fa-headset"></i>Soporte</a></div><div class="col-md-6 col-lg-3"><a class="module-link" th:href="@{/datos}"><i class="fas fa-user-shield"></i>Tratamiento de datos</a></div><div class="col-md-6 col-lg-3"><a class="module-link" th:href="@{/privacidad}"><i class="fas fa-lock"></i>Privacidad</a></div><div class="col-md-6 col-lg-3"><a class="module-link" th:href="@{/terminos}"><i class="fas fa-file-contract"></i>Términos</a></div></div></div></section>
+</main>
+<footer class="py-4"><div class="container text-center"><p class="mb-1">Invento Acción, proyecto académico de gestión de inventario tecnológico.</p><small>&copy; 2026 Invento Acción.</small></div></footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body></html>
