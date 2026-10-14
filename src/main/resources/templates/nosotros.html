@@ -5,48 +5,79 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Nosotros - Invento Acción</title>
+  <meta name="description" content="Conoce el propósito, la misión, la visión y los principios del proyecto académico Invento Acción.">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>:root{--primary:#2563eb;--secondary:#1e40af;--dark:#1f2937;}body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:var(--dark);line-height:1.6;} .navbar{background:linear-gradient(135deg,var(--primary)0%,var(--secondary)100%);padding:1rem 0;} .navbar-brand{color:#fff!important;font-weight:bold;} .nav-link{color:rgba(255,255,255,0.85)!important;} .nav-link:hover{color:#fff!important;}</style>
+  <style>
+    :root{--primary:#2563eb;--secondary:#1e40af;--dark:#1f2937;--muted:#64748b;--light:#f8fafc;--border:#e2e8f0}
+    html{scroll-behavior:smooth}body{margin:0;font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;color:var(--dark);background:var(--light);line-height:1.7}
+    .navbar{padding:1rem 0;background:linear-gradient(135deg,var(--primary),var(--secondary));box-shadow:0 4px 16px rgba(15,23,42,.15)}
+    .navbar-brand{color:#fff!important;font-size:1.35rem;font-weight:700}.nav-link{padding:.55rem .75rem!important;color:rgba(255,255,255,.88)!important;border-radius:.5rem}.nav-link:hover,.nav-link.active{color:#fff!important;background:rgba(255,255,255,.15)}
+    .hero{padding:5rem 0;color:#fff;background:linear-gradient(135deg,rgba(37,99,235,.97),rgba(30,64,175,.97))}.hero-label{display:inline-flex;align-items:center;gap:.5rem;margin-bottom:1.25rem;padding:.45rem .85rem;font-weight:600;border:1px solid rgba(255,255,255,.32);border-radius:999px;background:rgba(255,255,255,.12)}
+    .hero h1{max-width:850px;font-size:clamp(2.2rem,5vw,3.6rem);font-weight:800;line-height:1.15}.hero p{max-width:760px;margin-top:1.25rem;font-size:1.1rem;color:rgba(255,255,255,.9)}
+    .section{padding:4.5rem 0}.section-title{margin-bottom:1rem;font-weight:800}.section-intro{max-width:780px;margin-bottom:2.25rem;color:var(--muted)}
+    .info-card{height:100%;padding:1.75rem;border:1px solid var(--border);border-radius:1rem;background:#fff;box-shadow:0 10px 30px rgba(15,23,42,.06)}.info-card .icon{display:inline-flex;align-items:center;justify-content:center;width:3rem;height:3rem;margin-bottom:1rem;color:var(--primary);font-size:1.25rem;border-radius:.85rem;background:#dbeafe}.info-card h3{margin-bottom:.8rem;font-size:1.25rem;font-weight:750}.info-card p{margin-bottom:0;color:var(--muted)}
+    .principle{display:flex;align-items:flex-start;gap:.85rem;height:100%;padding:1.15rem;border:1px solid var(--border);border-radius:.8rem;background:#fff}.principle i{margin-top:.25rem;color:var(--primary)}
+    .scope-box{padding:2rem;border-left:5px solid var(--primary);border-radius:.8rem;background:#eff6ff}.module-link{display:flex;align-items:center;gap:.7rem;height:100%;padding:1rem 1.15rem;color:var(--dark);text-decoration:none;border:1px solid var(--border);border-radius:.8rem;background:#fff;transition:transform .2s ease,box-shadow .2s ease}.module-link:hover{color:var(--primary);transform:translateY(-2px);box-shadow:0 8px 22px rgba(15,23,42,.08)}.module-link i{color:var(--primary)}footer{color:rgba(255,255,255,.82);background:#111827}
+  </style>
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top" aria-label="Navegación principal">
     <div class="container">
-      <a class="navbar-brand" href="/">Invento <span>Acción</span></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" th:href="@{/}">Inicio</a></li>
-          <li class="nav-item"><a class="nav-link" th:href="@{/nosotros}">Nosotros</a></li>
-          <li class="nav-item"><a class="nav-link" th:href="@{/contacto}">Contacto</a></li>
-        </ul>
-      </div>
+      <a class="navbar-brand" th:href="@{/}">Invento <span>Acción</span></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Mostrar navegación"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="navbarNav"><ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" th:href="@{/}">Inicio</a></li>
+        <li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/nosotros}">Nosotros</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/datos}">Tratamiento de datos</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/terminos}">Términos</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/privacidad}">Privacidad</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/soporte}">Soporte</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/contacto}">Contáctenos</a></li>
+      </ul></div>
     </div>
   </nav>
-
-  <section class="container my-5">
-    <h1>Nosotros</h1>
-    <p>Información sobre la misión, visión y equipo de Invento Acción.</p>
-    <a th:href="@{/}" class="btn btn-primary">Volver al inicio</a>
-  </section>
-
-  <footer class="bg-dark text-white py-4">
-    <div class="container text-center">
-      <small>&copy; 2026 Invento Acción.</small>
-    </div>
-  </footer>
-
+  <header class="hero"><div class="container">
+    <div class="hero-label"><i class="fas fa-graduation-cap" aria-hidden="true"></i>Proyecto académico</div>
+    <h1>Organización y seguimiento del inventario tecnológico</h1>
+    <p>Invento Acción es una plataforma académica orientada al registro, consulta y seguimiento de activos tecnológicos desde un entorno centralizado.</p>
+    <a th:href="@{/}" class="btn btn-light btn-lg mt-3"><i class="fas fa-arrow-left me-2" aria-hidden="true"></i>Volver al inicio</a>
+  </div></header>
+  <main>
+    <section class="section"><div class="container">
+      <h2 class="section-title">¿Qué es Invento Acción?</h2>
+      <p class="section-intro">Es un proyecto educativo que integra funciones para organizar información de usuarios, activos, categorías, ubicaciones y movimientos de inventario. Su desarrollo permite aplicar conocimientos de programación, bases de datos, seguridad e integración de sistemas.</p>
+      <div class="row g-4">
+        <div class="col-md-4"><article class="info-card"><div class="icon"><i class="fas fa-bullseye" aria-hidden="true"></i></div><h3>Propósito</h3><p>Facilitar el registro, la consulta y el seguimiento de activos tecnológicos, reduciendo la dispersión de la información y mejorando su organización.</p></article></div>
+        <div class="col-md-4"><article class="info-card"><div class="icon"><i class="fas fa-compass" aria-hidden="true"></i></div><h3>Misión</h3><p>Desarrollar una plataforma académica clara y funcional que apoye la administración de inventarios tecnológicos y el aprendizaje práctico de tecnologías de software.</p></article></div>
+        <div class="col-md-4"><article class="info-card"><div class="icon"><i class="fas fa-binoculars" aria-hidden="true"></i></div><h3>Visión</h3><p>Consolidar un proyecto educativo modular que pueda evolucionar con nuevas funciones, mejores controles y herramientas de consulta y análisis.</p></article></div>
+      </div>
+    </div></section>
+    <section class="section bg-white"><div class="container">
+      <h2 class="section-title">Principios del proyecto</h2><p class="section-intro">El desarrollo de Invento Acción se orienta por criterios prácticos para mantener una solución comprensible, útil y responsable.</p>
+      <div class="row g-3">
+        <div class="col-md-6 col-lg-4"><div class="principle"><i class="fas fa-folder-tree"></i><div><strong>Organización</strong><div class="text-secondary">Información estructurada y disponible para su consulta.</div></div></div></div>
+        <div class="col-md-6 col-lg-4"><div class="principle"><i class="fas fa-universal-access"></i><div><strong>Facilidad de uso</strong><div class="text-secondary">Funciones comprensibles para apoyar las tareas del usuario.</div></div></div></div>
+        <div class="col-md-6 col-lg-4"><div class="principle"><i class="fas fa-shield-halved"></i><div><strong>Uso responsable</strong><div class="text-secondary">Manejo prudente de accesos e información registrada.</div></div></div></div>
+        <div class="col-md-6 col-lg-4"><div class="principle"><i class="fas fa-route"></i><div><strong>Trazabilidad</strong><div class="text-secondary">Seguimiento de los movimientos asociados con los activos.</div></div></div></div>
+        <div class="col-md-6 col-lg-4"><div class="principle"><i class="fas fa-arrows-rotate"></i><div><strong>Mejora continua</strong><div class="text-secondary">Evolución mediante pruebas, revisión y aprendizaje.</div></div></div></div>
+        <div class="col-md-6 col-lg-4"><div class="principle"><i class="fas fa-database"></i><div><strong>Integridad de la información</strong><div class="text-secondary">Registros claros y coherentes para apoyar las consultas.</div></div></div></div>
+      </div>
+    </div></section>
+    <section class="section"><div class="container"><div class="scope-box"><h2 class="h4 fw-bold">Alcance del proyecto</h2><p class="mb-0">Invento Acción es una solución académica en desarrollo destinada a actividades educativas y demostraciones funcionales. Antes de utilizarse como sistema empresarial definitivo requiere evaluación, pruebas y controles adicionales acordes con las necesidades de la organización que pretenda implementarlo.</p></div></div></section>
+    <section class="section bg-white"><div class="container">
+      <h2 class="section-title">Información del proyecto</h2><p class="section-intro">Consulta las demás secciones informativas de Invento Acción.</p>
+      <div class="row g-3">
+        <div class="col-md-6 col-lg-4"><a class="module-link" th:href="@{/datos}"><i class="fas fa-user-shield"></i>Tratamiento de datos</a></div>
+        <div class="col-md-6 col-lg-4"><a class="module-link" th:href="@{/terminos}"><i class="fas fa-file-contract"></i>Términos y condiciones</a></div>
+        <div class="col-md-6 col-lg-4"><a class="module-link" th:href="@{/privacidad}"><i class="fas fa-lock"></i>Política de privacidad</a></div>
+        <div class="col-md-6 col-lg-4"><a class="module-link" th:href="@{/soporte}"><i class="fas fa-headset"></i>Soporte</a></div>
+        <div class="col-md-6 col-lg-4"><a class="module-link" th:href="@{/contacto}"><i class="fas fa-envelope"></i>Contáctenos</a></div>
+        <div class="col-md-6 col-lg-4"><a class="module-link" th:href="@{/}"><i class="fas fa-house"></i>Página principal</a></div>
+      </div>
+    </div></section>
+  </main>
+  <footer class="py-4"><div class="container text-center"><p class="mb-1">Invento Acción, proyecto académico de gestión de inventario tecnológico.</p><small>&copy; 2026 Invento Acción.</small></div></footer>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) { target.scrollIntoView({ behavior: 'smooth' }); }
-      });
-    });
-  </script>
 </body>
 </html>

@@ -1,52 +1,24 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Soporte - Invento Acción</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>:root{--primary:#2563eb;--secondary:#1e40af;--dark:#1f2937;}body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:var(--dark);line-height:1.6;} .navbar{background:linear-gradient(135deg,var(--primary)0%,var(--secondary)100%);padding:1rem 0;} .navbar-brand{color:#fff!important;font-weight:bold;} .nav-link{color:rgba(255,255,255,0.85)!important;} .nav-link:hover{color:#fff!important;}</style>
-</head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Soporte - Invento Acción</title>
+<meta name="description" content="Centro de ayuda del proyecto académico Invento Acción.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{--primary:#2563eb;--secondary:#1e40af;--dark:#1f2937;--muted:#64748b;--light:#f8fafc;--border:#e2e8f0}
+body{margin:0;font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;color:var(--dark);background:var(--light);line-height:1.7}.navbar{padding:1rem 0;background:linear-gradient(135deg,var(--primary),var(--secondary));box-shadow:0 4px 16px rgba(15,23,42,.15)}.navbar-brand{color:#fff!important;font-size:1.35rem;font-weight:700}.nav-link{padding:.55rem .75rem!important;color:rgba(255,255,255,.88)!important;border-radius:.5rem}.nav-link:hover,.nav-link.active{color:#fff!important;background:rgba(255,255,255,.15)}.hero{padding:4.5rem 0;color:#fff;background:linear-gradient(135deg,rgba(37,99,235,.97),rgba(30,64,175,.97))}.hero-label{display:inline-flex;align-items:center;gap:.5rem;margin-bottom:1.15rem;padding:.45rem .85rem;font-weight:600;border:1px solid rgba(255,255,255,.32);border-radius:999px;background:rgba(255,255,255,.12)}.hero h1{font-size:clamp(2.1rem,5vw,3.4rem);font-weight:800}.hero p{max-width:800px;color:rgba(255,255,255,.9);font-size:1.08rem}.section{padding:4rem 0}.section-title{margin-bottom:1rem;font-weight:800}.section-intro{max-width:840px;color:var(--muted)}.notice{padding:1.4rem;border:1px solid #bfdbfe;border-left:5px solid var(--primary);border-radius:.85rem;background:#eff6ff}.card-info{height:100%;padding:1.5rem;border:1px solid var(--border);border-radius:1rem;background:#fff;box-shadow:0 8px 24px rgba(15,23,42,.05)}.card-info h2,.card-info h3{font-size:1.2rem;font-weight:750}.card-info i{color:var(--primary)}.help-list{padding-left:1.2rem}.help-list li{margin-bottom:.55rem}.accordion-button:not(.collapsed){color:var(--secondary);background:#eff6ff}.accordion-button:focus{box-shadow:0 0 0 .2rem rgba(37,99,235,.18)}.module-link{display:flex;align-items:center;gap:.7rem;height:100%;padding:1rem;color:var(--dark);text-decoration:none;border:1px solid var(--border);border-radius:.8rem;background:#fff}.module-link:hover{color:var(--primary);box-shadow:0 8px 22px rgba(15,23,42,.08)}footer{color:rgba(255,255,255,.82);background:#111827}
+</style></head>
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
-    <div class="container">
-      <a class="navbar-brand" href="/">Invento <span>Acción</span></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" th:href="@{/}">Inicio</a></li>
-          <li class="nav-item"><a class="nav-link" th:href="@{/nosotros}">Nosotros</a></li>
-          <li class="nav-item"><a class="nav-link" th:href="@{/contacto}">Contacto</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-  <section class="container my-5">
-    <h1>Soporte</h1>
-    <p>Preguntas frecuentes, guías rápidas y enlaces de ayuda.</p>
-    <a th:href="@{/}" class="btn btn-primary">Volver al inicio</a>
-  </section>
-
-  <footer class="bg-dark text-white py-4">
-    <div class="container text-center">
-      <small>&copy; 2026 Invento Acción.</small>
-    </div>
-  </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) { target.scrollIntoView({ behavior: 'smooth' }); }
-      });
-    });
-  </script>
-</body>
-</html>
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top" aria-label="Navegación principal"><div class="container"><a class="navbar-brand" th:href="@{/}">Invento <span>Acción</span></a><button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Mostrar navegación"><span class="navbar-toggler-icon"></span></button><div class="collapse navbar-collapse" id="navbarNav"><ul class="navbar-nav ms-auto"><li class="nav-item"><a class="nav-link" th:href="@{/}">Inicio</a></li><li class="nav-item"><a class="nav-link" th:href="@{/nosotros}">Nosotros</a></li><li class="nav-item"><a class="nav-link" th:href="@{/datos}">Tratamiento de datos</a></li><li class="nav-item"><a class="nav-link" th:href="@{/terminos}">Términos</a></li><li class="nav-item"><a class="nav-link" th:href="@{/privacidad}">Privacidad</a></li><li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/soporte}">Soporte</a></li><li class="nav-item"><a class="nav-link" th:href="@{/contacto}">Contáctenos</a></li></ul></div></div></nav>
+<header class="hero"><div class="container"><div class="hero-label"><i class="fas fa-headset"></i>Centro de ayuda</div><h1>Soporte de Invento Acción</h1><p>Encuentra orientación para resolver dificultades comunes y preparar un reporte claro sobre el funcionamiento de la plataforma.</p></div></header>
+<main>
+<section class="section"><div class="container"><div class="notice mb-5"><strong>Importante:</strong> Invento Acción es un proyecto académico en desarrollo. El soporte se ofrece como orientación sobre el uso de la plataforma y no debe utilizarse para enviar contraseñas, credenciales o información confidencial.</div><h2 class="section-title">¿Cómo podemos orientarte?</h2><p class="section-intro mb-4">Antes de reportar un problema, identifica el módulo, la acción realizada y el mensaje mostrado por el sistema.</p><div class="row g-4"><div class="col-md-6 col-lg-4"><article class="card-info"><h3><i class="fas fa-right-to-bracket me-2"></i>Acceso a la plataforma</h3><ul class="help-list mb-0"><li>Verifica el usuario o correo ingresado.</li><li>Confirma que utilizas la contraseña correspondiente.</li><li>Revisa si la cuenta requiere validación del correo.</li><li>No compartas tu contraseña al solicitar ayuda.</li></ul></article></div><div class="col-md-6 col-lg-4"><article class="card-info"><h3><i class="fas fa-boxes-stacked me-2"></i>Activos y movimientos</h3><ul class="help-list mb-0"><li>Completa los campos obligatorios.</li><li>Verifica cantidades, categoría, ubicación y estado.</li><li>Evita repetir una operación mientras se procesa.</li><li>Anota el mensaje visible si ocurre un error.</li></ul></article></div><div class="col-md-6 col-lg-4"><article class="card-info"><h3><i class="fas fa-file-circle-exclamation me-2"></i>Reporte de errores</h3><ul class="help-list mb-0"><li>Indica el módulo y la acción realizada.</li><li>Describe el resultado esperado y el observado.</li><li>Incluye el mensaje de error y la fecha del evento.</li><li>Evita adjuntar datos personales innecesarios.</li></ul></article></div></div></div></section>
+<section class="section bg-white"><div class="container"><h2 class="section-title">Información útil para solicitar ayuda</h2><p class="section-intro mb-4">Un reporte claro facilita la revisión del problema. Puedes preparar los siguientes datos sin incluir contraseñas ni secretos de acceso.</p><div class="row g-4"><div class="col-md-6"><article class="card-info"><h3>Datos recomendados</h3><ul class="help-list mb-0"><li>Nombre y correo para recibir respuesta.</li><li>Módulo donde ocurrió la dificultad.</li><li>Descripción breve y ordenada de lo sucedido.</li><li>Mensaje de error visible, si existe.</li><li>Fecha del incidente.</li></ul></article></div><div class="col-md-6"><article class="card-info"><h3>Datos que no debes enviar</h3><ul class="help-list mb-0"><li>Contraseñas.</li><li>Tokens de validación.</li><li>Credenciales de bases de datos o correo.</li><li>Llaves de acceso o secretos del entorno.</li><li>Información personal que no sea necesaria para la solicitud.</li></ul></article></div></div></div></section>
+<section class="section"><div class="container"><h2 class="section-title">Preguntas frecuentes</h2><div class="accordion" id="faqSoporte"><div class="accordion-item"><h3 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="true" aria-controls="faq1">¿Invento Acción es gratuito?</button></h3><div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqSoporte"><div class="accordion-body">Sí. Actualmente se presenta como un proyecto académico gratuito.</div></div></div><div class="accordion-item"><h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" aria-expanded="false" aria-controls="faq2">¿Puede utilizarse como sistema empresarial definitivo?</button></h3><div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqSoporte"><div class="accordion-body">No se presenta como una solución empresarial certificada. Su adopción en un entorno real requiere evaluación, pruebas y controles adicionales.</div></div></div><div class="accordion-item"><h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" aria-expanded="false" aria-controls="faq3">¿Dónde se registran los activos?</button></h3><div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqSoporte"><div class="accordion-body">Los activos se gestionan desde el módulo correspondiente, disponible para usuarios autorizados según la configuración de la plataforma.</div></div></div><div class="accordion-item"><h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" aria-expanded="false" aria-controls="faq4">¿Qué hago si encuentro un error?</button></h3><div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqSoporte"><div class="accordion-body">Prepara un reporte con el módulo, la acción realizada, el resultado observado y el mensaje de error. El canal de contacto deberá estar habilitado antes de enviar información personal.</div></div></div></div></div></section>
+<section class="section bg-white"><div class="container"><h2 class="section-title">Canales y más información</h2><p class="section-intro">El formulario de contacto se encuentra dentro del alcance de actualización de este módulo. Solo deberá confirmar la recepción cuando el mensaje quede registrado o sea enviado realmente.</p><div class="row g-3"><div class="col-md-6 col-lg-3"><a class="module-link" th:href="@{/contacto}"><i class="fas fa-envelope"></i>Contáctenos</a></div><div class="col-md-6 col-lg-3"><a class="module-link" th:href="@{/nosotros}"><i class="fas fa-users"></i>Nosotros</a></div><div class="col-md-6 col-lg-3"><a class="module-link" th:href="@{/datos}"><i class="fas fa-user-shield"></i>Tratamiento de datos</a></div><div class="col-md-6 col-lg-3"><a class="module-link" th:href="@{/privacidad}"><i class="fas fa-lock"></i>Privacidad</a></div></div></div></section>
+</main>
+<footer class="py-4"><div class="container text-center"><p class="mb-1">Invento Acción, proyecto académico de gestión de inventario tecnológico.</p><small>&copy; 2026 Invento Acción.</small></div></footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body></html>
