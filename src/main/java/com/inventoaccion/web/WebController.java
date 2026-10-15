@@ -8,36 +8,56 @@ public class WebController {
 
     @GetMapping("/inicio")
     public String index() {
-        return "index"; // plantilla principal
+        return "index";
     }
 
     @GetMapping("/nosotros")
     public String nosotros() {
-        return "nosotros"; // plantilla nosotros.html
+        return "nosotros";
     }
 
     @GetMapping("/datos")
     public String datos() {
-        return "datos"; // plantilla datos.html
+        return "datos";
     }
 
     @GetMapping("/terminos")
     public String terminos() {
-        return "terminos"; // plantilla terminos.html
+        return "terminos";
     }
 
     @GetMapping("/privacidad")
     public String privacidad() {
-        return "privacidad"; // plantilla privacidad.html
+        return "privacidad";
     }
 
     @GetMapping("/soporte")
     public String soporte() {
-        return "soporte"; // plantilla soporte.html
+        return "soporte";
     }
 
     @GetMapping("/contacto")
     public String contacto() {
-        return "contacto"; // plantilla contacto.html
+        return "contacto";
+    }
+
+    @GetMapping("/configuracion/sistema")
+    public String configuracionSistema() {
+        return "configuracion-sistema";
+    }
+
+    @GetMapping("/configuracion/seguridad")
+    public String configuracionSeguridad() {
+        return "configuracion-seguridad";
+    }
+
+    @GetMapping("/configuracion/notificaciones")
+    public String configuracionNotificaciones() {
+        return "configuracion-notificaciones";
+    }
+
+    @GetMapping("/configuracion/integraciones")
+    public String configuracionIntegraciones() {
+        return "configuracion-integraciones";
     }
 }
