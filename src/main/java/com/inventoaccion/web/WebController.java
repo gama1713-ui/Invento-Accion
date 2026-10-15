@@ -60,4 +60,24 @@ public class WebController {
     public String configuracionIntegraciones() {
         return "configuracion-integraciones";
     }
+
+    @GetMapping("/administracion/logs")
+    public String administracionLogs() {
+        return "administracion-logs";
+    }
+
+    @GetMapping("/administracion/backup")
+    public String administracionBackup() {
+        return "administracion-backup";
+    }
+
+    @GetMapping("/administracion/mantenimiento")
+    public String administracionMantenimiento() {
+        return "administracion-mantenimiento";
+    }
+
+    @GetMapping("/administracion/auditoria")
+    public String administracionAuditoria() {
+        return "administracion-auditoria";
+    }
 }
