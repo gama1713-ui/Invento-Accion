@@ -80,4 +80,19 @@ public class WebController {
     public String administracionAuditoria() {
         return "administracion-auditoria";
     }
+
+    @GetMapping("/gestion/categorias")
+    public String gestionCategorias() {
+        return "gestion-categorias";
+    }
+
+    @GetMapping("/gestion/proveedores")
+    public String gestionProveedores() {
+        return "gestion-proveedores";
+    }
+
+    @GetMapping("/gestion/ubicaciones")
+    public String gestionUbicaciones() {
+        return "gestion-ubicaciones";
+    }
 }
