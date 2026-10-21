@@ -73,4 +73,4 @@ EXPOSE 8080
 # Spring Boot utiliza el puerto público entregado por Render.
 #
 # Java permanece como proceso principal mediante exec.
-ENTRYPOINT ["sh", "-c", "(cd /app/modulo-python-inventarios && /opt/inventarios-venv/bin/python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 > /tmp/python-inventarios.log 2>&1) & php -S 127.0.0.1:8081 -t /app/modulo-php-sitp > /tmp/php-sitp.log 2>&1 & exec java -jar /app/app.jar --server.port=${PORT:-8080}"]
+ENTRYPOINT ["sh", "-c", "(cd /app/modulo-python-inventarios && /opt/inventarios-venv/bin/python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 > /tmp/python-inventarios.log 2>&1) & php -S 127.0.0.1:8081 -t /app/modulo-php-sitp > /tmp/php-sitp.log 2>&1 & exec java -jar /app/app.jar --server.address=0.0.0.0 --server.port=${PORT:-8080}"]
