@@ -1,38 +1,72 @@
 "use strict";
 
 /*
- * Código JavaScript para la página Consulta Inventario.
+ * Consulta Inventario.
  *
- * Este archivo consume las rutas públicas entregadas por Spring Boot:
+ * Consume únicamente las rutas públicas entregadas por Spring Boot:
  *
- * GET /api/inventarios
+ * GET /api/inventarios?pagina=1&tamano=25
+ * GET /api/inventarios/estado
  * GET /api/inventarios/{codigo}
  *
- * Spring Boot se comunica internamente con FastAPI.
- * El navegador nunca utiliza directamente el puerto interno 8000.
- *
- * Este módulo solamente consulta información.
- * No crea, modifica ni elimina registros.
+ * Este módulo es exclusivamente de lectura.
  */
 
+const TAMANO_PREDETERMINADO = 25;
+const TAMANO_MAXIMO = 100;
+const TIEMPO_MAXIMO_SOLICITUD_MS = 15000;
 
-/*
- * Obtiene los elementos principales de la página.
- */
-const formularioConsulta = document.getElementById("formularioConsulta");
-const codigoInventario = document.getElementById("codigoInventario");
-const botonMostrarTodos = document.getElementById("botonMostrarTodos");
-const mensajeConsulta = document.getElementById("mensajeConsulta");
+const formularioConsulta = document.getElementById(
+  "formularioConsulta"
+);
+
+const codigoInventario = document.getElementById(
+  "codigoInventario"
+);
+
+const botonMostrarTodos = document.getElementById(
+  "botonMostrarTodos"
+);
+
+const mensajeConsulta = document.getElementById(
+  "mensajeConsulta"
+);
+
 const cuerpoTablaInventarios = document.getElementById(
   "cuerpoTablaInventarios"
 );
 
+const estadoServicio = document.getElementById(
+  "estadoServicio"
+);
+
+const controlesPaginacion = document.getElementById(
+  "controlesPaginacion"
+);
+
+const tamanoPagina = document.getElementById(
+  "tamanoPagina"
+);
+
+const botonPaginaAnterior = document.getElementById(
+  "botonPaginaAnterior"
+);
+
+const botonPaginaSiguiente = document.getElementById(
+  "botonPaginaSiguiente"
+);
+
+const informacionPagina = document.getElementById(
+  "informacionPagina"
+);
+
+let paginaActual = 1;
+let totalPaginas = 0;
+let consultaActiva = null;
+
 
 /*
  * Muestra un mensaje dentro de la página.
- *
- * Los tipos permitidos son:
- * info, success, warning y danger.
  */
 function mostrarMensaje(texto, tipo) {
   mensajeConsulta.className = `alert alert-${tipo}`;
@@ -41,7 +75,7 @@ function mostrarMensaje(texto, tipo) {
 
 
 /*
- * Limpia la tabla y muestra un mensaje en una sola fila.
+ * Muestra una fila informativa dentro de la tabla.
  */
 function mostrarFilaInformativa(texto) {
   cuerpoTablaInventarios.replaceChildren();
@@ -59,7 +93,84 @@ function mostrarFilaInformativa(texto) {
 
 
 /*
- * Convierte la fecha recibida desde la API en un texto fácil de leer.
+ * Cambia el indicador visual del estado del servicio.
+ */
+function actualizarEstadoServicio(texto, tipo) {
+  estadoServicio.className = `badge text-bg-${tipo}`;
+  estadoServicio.textContent = texto;
+}
+
+
+/*
+ * Habilita o deshabilita los controles mientras existe
+ * una solicitud en curso.
+ */
+function establecerControlesBloqueados(bloqueados) {
+  botonMostrarTodos.disabled = bloqueados;
+  codigoInventario.disabled = bloqueados;
+  tamanoPagina.disabled = bloqueados;
+
+  const botonConsultar = formularioConsulta.querySelector(
+    'button[type="submit"]'
+  );
+
+  if (botonConsultar) {
+    botonConsultar.disabled = bloqueados;
+  }
+
+  if (bloqueados) {
+    botonPaginaAnterior.disabled = true;
+    botonPaginaSiguiente.disabled = true;
+    return;
+  }
+
+  actualizarBotonesPaginacion();
+}
+
+
+/*
+ * Cancela la solicitud anterior si todavía se encuentra activa.
+ */
+function cancelarConsultaAnterior() {
+  if (consultaActiva) {
+    consultaActiva.abort();
+    consultaActiva = null;
+  }
+}
+
+
+/*
+ * Crea un controlador con timeout para una solicitud.
+ */
+function crearControladorDeSolicitud() {
+  cancelarConsultaAnterior();
+
+  const controlador = new AbortController();
+
+  const temporizador = window.setTimeout(
+    function () {
+      controlador.abort();
+    },
+    TIEMPO_MAXIMO_SOLICITUD_MS
+  );
+
+  consultaActiva = controlador;
+
+  return {
+    controlador,
+    finalizar: function () {
+      window.clearTimeout(temporizador);
+
+      if (consultaActiva === controlador) {
+        consultaActiva = null;
+      }
+    }
+  };
+}
+
+
+/*
+ * Convierte la fecha recibida desde la API en texto legible.
  */
 function formatearFecha(fechaRecibida) {
   if (!fechaRecibida) {
@@ -80,11 +191,13 @@ function formatearFecha(fechaRecibida) {
 
 
 /*
- * Crea una etiqueta visual para mostrar el estado del inventario.
+ * Crea una etiqueta visual para el estado del inventario.
  */
 function crearEtiquetaEstado(estado) {
   const etiqueta = document.createElement("span");
-  const estadoNormalizado = String(estado || "").toLowerCase();
+  const estadoNormalizado = String(
+    estado || ""
+  ).toLowerCase();
 
   etiqueta.classList.add("etiqueta-estado");
   etiqueta.textContent = estado || "Sin estado";
@@ -103,9 +216,7 @@ function crearEtiquetaEstado(estado) {
 
 
 /*
- * Crea una celda segura utilizando texto.
- *
- * Se usa textContent para evitar insertar HTML recibido desde la API.
+ * Crea una celda segura mediante textContent.
  */
 function crearCelda(texto) {
   const celda = document.createElement("td");
@@ -115,7 +226,7 @@ function crearCelda(texto) {
 
 
 /*
- * Agrega un registro de inventario a la tabla.
+ * Agrega un registro a la tabla.
  */
 function agregarInventarioATabla(inventario) {
   const fila = document.createElement("tr");
@@ -129,11 +240,17 @@ function agregarInventarioATabla(inventario) {
   fila.appendChild(crearCelda(inventario.stockMinimo));
 
   const celdaEstado = document.createElement("td");
-  celdaEstado.appendChild(crearEtiquetaEstado(inventario.estado));
+
+  celdaEstado.appendChild(
+    crearEtiquetaEstado(inventario.estado)
+  );
+
   fila.appendChild(celdaEstado);
 
   fila.appendChild(
-    crearCelda(formatearFecha(inventario.ultimaActualizacion))
+    crearCelda(
+      formatearFecha(inventario.ultimaActualizacion)
+    )
   );
 
   cuerpoTablaInventarios.appendChild(fila);
@@ -141,13 +258,18 @@ function agregarInventarioATabla(inventario) {
 
 
 /*
- * Muestra uno o varios inventarios.
+ * Muestra uno o varios registros.
  */
 function mostrarInventarios(inventarios) {
   cuerpoTablaInventarios.replaceChildren();
 
-  if (!Array.isArray(inventarios) || inventarios.length === 0) {
-    mostrarFilaInformativa("No se encontraron inventarios.");
+  if (
+    !Array.isArray(inventarios)
+    || inventarios.length === 0
+  ) {
+    mostrarFilaInformativa(
+      "No se encontraron inventarios."
+    );
     return;
   }
 
@@ -166,7 +288,10 @@ async function obtenerMensajeDeError(respuesta) {
       return datosError.detail;
     }
   } catch (error) {
-    console.error("No fue posible leer el mensaje de la API.", error);
+    console.error(
+      "No fue posible leer el mensaje de la API.",
+      error
+    );
   }
 
   return "No fue posible completar la consulta.";
@@ -174,47 +299,207 @@ async function obtenerMensajeDeError(respuesta) {
 
 
 /*
- * Consulta todos los inventarios.
+ * Obtiene y valida el tamaño de página seleccionado.
  */
-async function consultarTodosLosInventarios() {
-  mostrarMensaje("Consultando inventarios...", "info");
-  mostrarFilaInformativa("Cargando información...");
+function obtenerTamanoPagina() {
+  const tamano = Number.parseInt(
+    tamanoPagina.value,
+    10
+  );
+
+  if (
+    !Number.isInteger(tamano)
+    || tamano < 1
+    || tamano > TAMANO_MAXIMO
+  ) {
+    return TAMANO_PREDETERMINADO;
+  }
+
+  return tamano;
+}
+
+
+/*
+ * Actualiza los controles de navegación.
+ */
+function actualizarBotonesPaginacion() {
+  const tienePaginas = totalPaginas > 0;
+
+  controlesPaginacion.classList.toggle(
+    "d-none",
+    !tienePaginas
+  );
+
+  controlesPaginacion.classList.toggle(
+    "d-flex",
+    tienePaginas
+  );
+
+  botonPaginaAnterior.disabled = (
+    !tienePaginas
+    || paginaActual <= 1
+  );
+
+  botonPaginaSiguiente.disabled = (
+    !tienePaginas
+    || paginaActual >= totalPaginas
+  );
+
+  if (!tienePaginas) {
+    informacionPagina.textContent =
+      "Sin páginas disponibles";
+    return;
+  }
+
+  informacionPagina.textContent =
+    `Página ${paginaActual} de ${totalPaginas}`;
+}
+
+
+/*
+ * Aplica la información de paginación recibida.
+ */
+function aplicarPaginacion(paginacion) {
+  paginaActual = Number(
+    paginacion.pagina || 1
+  );
+
+  totalPaginas = Number(
+    paginacion.totalPaginas || 0
+  );
+
+  actualizarBotonesPaginacion();
+}
+
+
+/*
+ * Describe los errores de cancelación y timeout.
+ */
+function obtenerMensajeSolicitud(error) {
+  if (error && error.name === "AbortError") {
+    return (
+      "La consulta fue cancelada o superó "
+      + "el tiempo máximo permitido."
+    );
+  }
+
+  return (
+    error.message
+    || "El servicio de inventarios no está disponible."
+  );
+}
+
+
+/*
+ * Consulta una página controlada de inventarios.
+ */
+async function consultarPaginaInventarios(
+  paginaSolicitada
+) {
+  const tamano = obtenerTamanoPagina();
+
+  mostrarMensaje(
+    "Consultando inventarios...",
+    "info"
+  );
+
+  mostrarFilaInformativa(
+    "Cargando información..."
+  );
+
+  establecerControlesBloqueados(true);
+
+  const solicitud = crearControladorDeSolicitud();
 
   try {
-    const respuesta = await fetch("/api/inventarios", {
-      method: "GET",
-      headers: {
-        Accept: "application/json"
-      },
-      cache: "no-store"
+    const parametros = new URLSearchParams({
+      pagina: String(paginaSolicitada),
+      tamano: String(tamano)
     });
 
+    const respuesta = await fetch(
+      `/api/inventarios?${parametros.toString()}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json"
+        },
+        cache: "no-store",
+        signal: solicitud.controlador.signal
+      }
+    );
+
     if (!respuesta.ok) {
-      const mensajeError = await obtenerMensajeDeError(respuesta);
+      const mensajeError =
+        await obtenerMensajeDeError(respuesta);
+
       throw new Error(mensajeError);
     }
 
-    const inventarios = await respuesta.json();
+    const datos = await respuesta.json();
 
-    mostrarInventarios(inventarios);
+    if (
+      !datos
+      || !Array.isArray(datos.elementos)
+      || !datos.paginacion
+    ) {
+      throw new Error(
+        "La respuesta del servicio no tiene "
+        + "el formato esperado."
+      );
+    }
+
+    mostrarInventarios(datos.elementos);
+    aplicarPaginacion(datos.paginacion);
+
+    const totalRegistros = Number(
+      datos.paginacion.totalRegistros || 0
+    );
 
     mostrarMensaje(
-      `Consulta completada. Registros encontrados: ${inventarios.length}.`,
+      `Consulta completada. Total de registros: `
+      + `${totalRegistros}.`,
+      "success"
+    );
+
+    actualizarEstadoServicio(
+      "Disponible",
       "success"
     );
   } catch (error) {
-    mostrarFilaInformativa("No fue posible cargar los inventarios.");
+    if (
+      error
+      && error.name === "AbortError"
+      && consultaActiva !== solicitud.controlador
+    ) {
+      return;
+    }
+
+    mostrarFilaInformativa(
+      "No fue posible cargar los inventarios."
+    );
 
     mostrarMensaje(
-      error.message || "El servicio de inventarios no está disponible.",
+      obtenerMensajeSolicitud(error),
       "danger"
     );
+
+    actualizarEstadoServicio(
+      "No disponible",
+      "danger"
+    );
+  } finally {
+    solicitud.finalizar();
+
+    if (consultaActiva === null) {
+      establecerControlesBloqueados(false);
+    }
   }
 }
 
 
 /*
- * Consulta un inventario utilizando su código.
+ * Consulta un inventario por código.
  */
 async function consultarInventarioPorCodigo(codigo) {
   const codigoLimpio = codigo.trim();
@@ -229,15 +514,26 @@ async function consultarInventarioPorCodigo(codigo) {
     return;
   }
 
+  controlesPaginacion.classList.add("d-none");
+  controlesPaginacion.classList.remove("d-flex");
+  totalPaginas = 0;
+
   mostrarMensaje(
     `Consultando el código ${codigoLimpio}...`,
     "info"
   );
 
-  mostrarFilaInformativa("Buscando inventario...");
+  mostrarFilaInformativa(
+    "Buscando inventario..."
+  );
+
+  establecerControlesBloqueados(true);
+
+  const solicitud = crearControladorDeSolicitud();
 
   try {
-    const codigoSeguro = encodeURIComponent(codigoLimpio);
+    const codigoSeguro =
+      encodeURIComponent(codigoLimpio);
 
     const respuesta = await fetch(
       `/api/inventarios/${codigoSeguro}`,
@@ -246,12 +542,15 @@ async function consultarInventarioPorCodigo(codigo) {
         headers: {
           Accept: "application/json"
         },
-        cache: "no-store"
+        cache: "no-store",
+        signal: solicitud.controlador.signal
       }
     );
 
     if (!respuesta.ok) {
-      const mensajeError = await obtenerMensajeDeError(respuesta);
+      const mensajeError =
+        await obtenerMensajeDeError(respuesta);
+
       throw new Error(mensajeError);
     }
 
@@ -260,34 +559,164 @@ async function consultarInventarioPorCodigo(codigo) {
     mostrarInventarios([inventario]);
 
     mostrarMensaje(
-      `Inventario ${inventario.codigo} encontrado correctamente.`,
+      `Inventario ${inventario.codigo} `
+      + "encontrado correctamente.",
+      "success"
+    );
+
+    actualizarEstadoServicio(
+      "Disponible",
       "success"
     );
   } catch (error) {
-    mostrarFilaInformativa("No se encontró información para mostrar.");
+    if (
+      error
+      && error.name === "AbortError"
+      && consultaActiva !== solicitud.controlador
+    ) {
+      return;
+    }
+
+    mostrarFilaInformativa(
+      "No se encontró información para mostrar."
+    );
 
     mostrarMensaje(
-      error.message || "No fue posible consultar el inventario.",
+      obtenerMensajeSolicitud(error),
       "danger"
     );
+  } finally {
+    solicitud.finalizar();
+
+    if (consultaActiva === null) {
+      establecerControlesBloqueados(false);
+    }
   }
 }
 
 
 /*
- * Atiende el envío del formulario de búsqueda.
+ * Consulta el estado del servicio sin descargar inventarios.
  */
-formularioConsulta.addEventListener("submit", function (evento) {
-  evento.preventDefault();
+async function consultarEstadoDelServicio() {
+  const controlador = new AbortController();
 
-  consultarInventarioPorCodigo(codigoInventario.value);
-});
+  const temporizador = window.setTimeout(
+    function () {
+      controlador.abort();
+    },
+    TIEMPO_MAXIMO_SOLICITUD_MS
+  );
+
+  actualizarEstadoServicio(
+    "Verificando",
+    "warning"
+  );
+
+  try {
+    const respuesta = await fetch(
+      "/api/inventarios/estado",
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json"
+        },
+        cache: "no-store",
+        signal: controlador.signal
+      }
+    );
+
+    if (!respuesta.ok) {
+      throw new Error(
+        "El servicio no respondió correctamente."
+      );
+    }
+
+    const datos = await respuesta.json();
+
+    if (datos.estado !== "disponible") {
+      throw new Error(
+        "El servicio informó un estado no disponible."
+      );
+    }
+
+    actualizarEstadoServicio(
+      "Disponible",
+      "success"
+    );
+  } catch (error) {
+    actualizarEstadoServicio(
+      "No disponible",
+      "danger"
+    );
+  } finally {
+    window.clearTimeout(temporizador);
+  }
+}
 
 
 /*
- * Atiende el botón que consulta todos los inventarios.
+ * Eventos de la página.
  */
-botonMostrarTodos.addEventListener("click", function () {
-  codigoInventario.value = "";
-  consultarTodosLosInventarios();
-});
+formularioConsulta.addEventListener(
+  "submit",
+  function (evento) {
+    evento.preventDefault();
+
+    consultarInventarioPorCodigo(
+      codigoInventario.value
+    );
+  }
+);
+
+
+botonMostrarTodos.addEventListener(
+  "click",
+  function () {
+    codigoInventario.value = "";
+    paginaActual = 1;
+
+    consultarPaginaInventarios(
+      paginaActual
+    );
+  }
+);
+
+
+botonPaginaAnterior.addEventListener(
+  "click",
+  function () {
+    if (paginaActual > 1) {
+      consultarPaginaInventarios(
+        paginaActual - 1
+      );
+    }
+  }
+);
+
+
+botonPaginaSiguiente.addEventListener(
+  "click",
+  function () {
+    if (paginaActual < totalPaginas) {
+      consultarPaginaInventarios(
+        paginaActual + 1
+      );
+    }
+  }
+);
+
+
+tamanoPagina.addEventListener(
+  "change",
+  function () {
+    paginaActual = 1;
+
+    consultarPaginaInventarios(
+      paginaActual
+    );
+  }
+);
+
+
+consultarEstadoDelServicio();
