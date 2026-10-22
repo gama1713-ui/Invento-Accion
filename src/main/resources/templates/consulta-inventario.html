@@ -235,7 +235,7 @@
             </h2>
 
             <p class="text-muted mb-0">
-              Ingresa un código o consulta todos los registros.
+              Ingresa un código o consulta una página de inventarios.
             </p>
           </div>
 
@@ -268,7 +268,7 @@
                         id="botonMostrarTodos"
                         class="btn btn-outline-primary flex-fill">
                   <i class="fas fa-list"></i>
-                  Mostrar todos
+                  Mostrar inventarios
                 </button>
               </div>
             </form>
@@ -278,11 +278,20 @@
 
       <div class="card-body">
 
+        <div class="d-flex flex-wrap align-items-center gap-2 mb-3"
+             aria-live="polite">
+          <span class="fw-semibold">Estado del servicio:</span>
+          <span id="estadoServicio"
+                class="badge text-bg-secondary">
+            Sin verificar
+          </span>
+        </div>
+
         <!-- Aquí se muestran mensajes de carga, éxito o error. -->
         <div id="mensajeConsulta"
              class="alert alert-info"
              role="alert">
-          Presiona “Mostrar todos” o busca un inventario por código.
+          Presiona “Mostrar inventarios” o busca un inventario por código.
         </div>
 
         <!-- La tabla se completa dinámicamente desde JavaScript. -->
@@ -310,6 +319,49 @@
               </tr>
             </tbody>
           </table>
+        </div>
+
+        <div id="controlesPaginacion"
+             class="d-none flex-wrap justify-content-between
+                    align-items-center gap-3 mt-3">
+          <div class="d-flex align-items-center gap-2">
+            <label for="tamanoPagina"
+                   class="form-label mb-0">
+              Registros por página
+            </label>
+
+            <select id="tamanoPagina"
+                    class="form-select form-select-sm"
+                    style="width:auto">
+              <option value="25" selected>25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+          </div>
+
+          <div class="d-flex align-items-center gap-2">
+            <button type="button"
+                    id="botonPaginaAnterior"
+                    class="btn btn-outline-secondary btn-sm"
+                    disabled>
+              <i class="fas fa-chevron-left"></i>
+              Anterior
+            </button>
+
+            <span id="informacionPagina"
+                  class="text-muted"
+                  aria-live="polite">
+              Página 1 de 1
+            </span>
+
+            <button type="button"
+                    id="botonPaginaSiguiente"
+                    class="btn btn-outline-secondary btn-sm"
+                    disabled>
+              Siguiente
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
         </div>
       </div>
     </section>
