@@ -39,6 +39,19 @@ database: Database = mongo_client[MONGODB_DATABASE]
 # Selecciona la colección exclusiva del módulo de inventarios.
 inventarios_collection: Collection = database[MONGODB_COLLECTION]
 
+# Selecciona la colección académica de activos sintéticos.
+#
+# Esta colección se consulta de forma independiente y nunca reemplaza
+# la colección operativa de inventarios.
+ACTIVOS_PRUEBA_COLLECTION = os.getenv(
+    "ACTIVOS_PRUEBA_COLLECTION",
+    "activos_prueba",
+)
+
+activos_prueba_collection: Collection = database[
+    ACTIVOS_PRUEBA_COLLECTION
+]
+
 
 def comprobar_conexion() -> bool:
     """

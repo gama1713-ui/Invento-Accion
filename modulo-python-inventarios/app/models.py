@@ -5,52 +5,234 @@ from pydantic import BaseModel, Field
 
 class InventarioRespuesta(BaseModel):
     """
-    Define la información de inventario que la API entrega al usuario.
+    Define la información de inventario agregado que la API
+    entrega al usuario.
 
-    Este modelo ayuda a validar que cada respuesta tenga una estructura clara.
+    Este modelo solamente valida respuestas.
     No guarda, modifica ni elimina información de MongoDB.
     """
 
-    # Código único utilizado para consultar el elemento del inventario.
-    codigo: str = Field(..., description="Código único del inventario")
+    codigo: str = Field(
+        ...,
+        description="Código único del inventario",
+    )
 
-    # Nombre con el que se identifica el producto o activo.
-    nombre: str = Field(..., description="Nombre del producto")
+    nombre: str = Field(
+        ...,
+        description="Nombre del producto",
+    )
 
-    # Grupo al que pertenece el producto.
-    categoria: str = Field(..., description="Categoría del producto")
+    categoria: str = Field(
+        ...,
+        description="Categoría del producto",
+    )
 
-    # Lugar donde se encuentra almacenado el producto.
-    ubicacion: str = Field(..., description="Ubicación del producto")
+    ubicacion: str = Field(
+        ...,
+        description="Ubicación del producto",
+    )
 
-    # Forma en que se cuenta el producto, por ejemplo Unidad o Caja.
-    unidadMedida: str = Field(..., description="Unidad de medida")
+    unidadMedida: str = Field(
+        ...,
+        description="Unidad de medida",
+    )
 
-    # Cantidad que se encuentra disponible actualmente.
     cantidadActual: int = Field(
         ...,
         ge=0,
         description="Cantidad disponible",
     )
 
-    # Cantidad mínima recomendada antes de generar una alerta.
     stockMinimo: int = Field(
         ...,
         ge=0,
         description="Cantidad mínima esperada",
     )
 
-    # Identificador opcional relacionado con una etiqueta QR.
     etiquetaQr: str | None = Field(
         default=None,
         description="Etiqueta QR del inventario",
     )
 
-    # Estado actual del producto, por ejemplo Disponible o Agotado.
-    estado: str = Field(..., description="Estado del producto")
+    estado: str = Field(
+        ...,
+        description="Estado del producto",
+    )
 
-    # Fecha de la última actualización del inventario.
     ultimaActualizacion: datetime = Field(
         ...,
         description="Fecha de la última actualización",
+    )
+
+
+class ActivoPruebaRespuesta(BaseModel):
+    """
+    Define la información pública de un activo sintético académico.
+
+    El modelo valida documentos de la colección activos_prueba.
+    No crea, modifica, reemplaza ni elimina documentos.
+    """
+
+    id_activo: int = Field(
+        ...,
+        ge=1,
+        description="Identificador numérico del activo sintético",
+    )
+
+    codigo_inventario: str = Field(
+        ...,
+        min_length=1,
+        description="Código único de inventario",
+    )
+
+    placa: str = Field(
+        ...,
+        min_length=1,
+        description="Placa patrimonial sintética",
+    )
+
+    tipo_activo: str = Field(
+        ...,
+        min_length=1,
+        description="Tipo del activo tecnológico",
+    )
+
+    descripcion: str = Field(
+        ...,
+        description="Descripción del activo",
+    )
+
+    marca: str = Field(
+        ...,
+        min_length=1,
+        description="Marca del activo",
+    )
+
+    modelo: str = Field(
+        ...,
+        min_length=1,
+        description="Modelo del activo",
+    )
+
+    serial: str = Field(
+        ...,
+        min_length=1,
+        description="Serial sintético único",
+    )
+
+    hostname: str = Field(
+        ...,
+        description="Hostname cuando corresponde",
+    )
+
+    extension_ip: str = Field(
+        ...,
+        description="Extensión de telefonía IP cuando corresponde",
+    )
+
+    sistema_operativo: str = Field(
+        ...,
+        description="Sistema operativo o firmware",
+    )
+
+    memoria: str = Field(
+        ...,
+        description="Capacidad de memoria",
+    )
+
+    almacenamiento: str = Field(
+        ...,
+        description="Capacidad de almacenamiento",
+    )
+
+    especificacion: str = Field(
+        ...,
+        description="Especificación principal",
+    )
+
+    estado: str = Field(
+        ...,
+        min_length=1,
+        description="Estado actual del activo",
+    )
+
+    id_usuario: str = Field(
+        ...,
+        min_length=1,
+        description="Identificador del usuario sintético asignado",
+    )
+
+    usuario_asignado: str = Field(
+        ...,
+        min_length=1,
+        description="Nombre sintético del usuario asignado",
+    )
+
+    vinculacion: str = Field(
+        ...,
+        min_length=1,
+        description="Tipo de vinculación simulada",
+    )
+
+    modalidad: str = Field(
+        ...,
+        min_length=1,
+        description="Modalidad A, B o C",
+    )
+
+    area_tecnologia: str = Field(
+        ...,
+        min_length=1,
+        description="Área tecnológica simulada",
+    )
+
+    ciudad: str = Field(
+        ...,
+        min_length=1,
+        description="Ciudad simulada de asignación",
+    )
+
+    id_proveedor: str = Field(
+        ...,
+        min_length=1,
+        description="Identificador del proveedor sintético",
+    )
+
+    fecha_compra: datetime = Field(
+        ...,
+        description="Fecha simulada de compra",
+    )
+
+    garantia_meses: int = Field(
+        ...,
+        ge=0,
+        description="Garantía expresada en meses",
+    )
+
+    qr_payload: str = Field(
+        ...,
+        min_length=1,
+        description="Contenido textual para generar el código QR",
+    )
+
+    code128_value: str = Field(
+        ...,
+        min_length=1,
+        description="Valor textual para Code 128",
+    )
+
+    observaciones: str = Field(
+        ...,
+        description="Observaciones académicas del activo",
+    )
+
+    dato_sintetico: bool = Field(
+        ...,
+        description="Confirma que el documento es sintético",
+    )
+
+    tipo_dataset: str = Field(
+        ...,
+        min_length=1,
+        description="Clasificación académica del conjunto de datos",
     )
