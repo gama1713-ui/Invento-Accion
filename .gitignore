@@ -22,3 +22,6 @@ __pycache__/
 # Respaldo local del Dockerfile antes de integrar Inventarios
 Dockerfile.backup-*
 Dockerfile.inventarios-candidato
+
+# Datos sinteticos locales para cargas controladas
+/datos-prueba-locales/
