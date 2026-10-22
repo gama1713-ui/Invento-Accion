@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 
+from app.routes.activos_prueba import router as activos_prueba_router
 from app.routes.inventario_ia import router as inventario_ia_router
 from app.routes.inventarios import router as inventarios_router
 
@@ -20,6 +21,9 @@ app.include_router(inventarios_router)
 
 # Registra las rutas academicas de Inventario IA.
 app.include_router(inventario_ia_router)
+
+# Registra la consulta paginada de activos sintéticos.
+app.include_router(activos_prueba_router)
 
 
 @app.get("/")
