@@ -362,7 +362,8 @@ def insertar_entidad(
     return {
         "leidos": len(registros),
         "insertados": insertados,
-  "rechazados": rechazados,
+        "omitidos": omitidos,
+        "rechazados": rechazados,
     }
 
 
